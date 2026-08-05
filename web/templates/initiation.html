@@ -37,15 +37,12 @@
 {% endblock %}
 {% block script %}
 <script>
-const expCodes = [
-  {% for exp in init.acts[1].experiments %}`{{ exp.code }}`,
-  {% endfor %}
-];
-const expAfter = [
-  {% for exp in init.acts[1].experiments %}`{{ exp.spirit_after }}`,
-  {% endfor %}
-];
-const bothAfter = `{{ init.acts[1].spirit_after_both }}`;
+// 整个启蒙仪式内容用 tojson 一次性注入为合法 JS，避免 HTML 转义破坏台词
+const INIT = {{ init | tojson }};
+const A = INIT.acts;
+const expCodes = A[1].experiments.map(e => e.code);
+const expAfter = A[1].experiments.map(e => e.spirit_after);
+const bothAfter = A[1].spirit_after_both;
 const doneExp = new Set();
 
 async function castAct1() {
@@ -60,8 +57,9 @@ async function castAct1() {
   c.textContent = (data.stdout || data.stderr || '(什么也没发生)');
   c.classList.toggle('ok', data.ok);
   if (data.ok) {
-    document.getElementById('act1-after').hidden = false;
-    document.getElementById('act1-after').textContent = '老精灵：\n' + `{{ init.acts[0].spirit_after }}`;
+    const s = document.getElementById('act1-after');
+    s.hidden = false;
+    s.textContent = '老精灵：\n' + A[0].spirit_after;
     document.getElementById('act2').hidden = false;
     document.getElementById('act2').scrollIntoView({behavior:'smooth'});
   }
@@ -78,8 +76,9 @@ async function castAct2(i) {
   c.hidden = false;
   c.textContent = (data.stdout || data.stderr || '');
   c.classList.toggle('ok', data.ok);
-  document.getElementById('act2-after').hidden = false;
-  document.getElementById('act2-after').textContent = '老精灵：\n' + expAfter[i];
+  const s = document.getElementById('act2-after');
+  s.hidden = false;
+  s.textContent = '老精灵：\n' + expAfter[i];
   doneExp.add(i);
   if (doneExp.size >= 2) {
     document.getElementById('act2-both').hidden = false;

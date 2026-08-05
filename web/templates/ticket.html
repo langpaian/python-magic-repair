@@ -94,7 +94,7 @@ function showMachine(data, label) {
 function showHint() {
   const s = document.getElementById('spirit');
   s.hidden = false;
-  s.textContent = '老精灵：' + `{{ law.get("statement", "") }}`;
+  s.textContent = '老精灵：' + {{ law.get("statement", "") | tojson }};
 }
 
 function markdown(text) {
