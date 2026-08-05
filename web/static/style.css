@@ -185,3 +185,19 @@ textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 1px var(--border);
 .mini-badge { width: 84px; margin-top: 10px; filter: drop-shadow(0 0 10px rgba(212,175,55,.3)); }
 .law-locked { font-size: 26px; color: var(--muted); letter-spacing: 6px; margin: 6px 0; }
 .law-locked-sub { font-size: 13px; color: var(--muted); }
+
+/* 觉醒 · 创造之权 */
+.awakening-page .act {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 22px; margin-bottom: 18px;
+}
+.awakening-page .act h2 { color: var(--gold-dim); margin-top: 0; letter-spacing: 1px; }
+.awakening-page .hint { color: var(--muted); margin: 0 0 12px; }
+.epilogue p { margin: 0 0 10px; line-height: 1.85; }
+.epilogue p:last-child { margin-bottom: 0; }
+.epilogue { background: rgba(107,79,192,.14); border-left: 3px solid var(--violet); }
+.certificate { text-align: center; }
+.cert-img {
+  width: 100%; max-width: 560px; border-radius: 12px;
+  box-shadow: 0 0 46px rgba(212,175,55,.22);
+}

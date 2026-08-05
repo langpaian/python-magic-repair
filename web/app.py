@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from engine import lore, runtime
-from engine.catalog import load_faults, load_initiation, laws_by_name
+from engine.catalog import load_ending, load_faults, load_initiation, laws_by_name
 from engine.judge import run_hidden_tests
 from engine.store import is_solved, mark_solved, solved_list
 
@@ -24,6 +24,7 @@ templates = Jinja2Templates(directory=WEB_DIR / "templates")
 FAULTS = load_faults()
 LAWS = laws_by_name()
 INIT = load_initiation()
+ENDING = load_ending()
 
 
 def _fault(fid: str):
@@ -36,6 +37,10 @@ def _next_unsolved(exclude: str | None = None):
         if f.id not in solved and f.id != exclude:
             return f
     return None
+
+
+def _all_solved() -> bool:
+    return len(solved_list()) >= len(FAULTS) and len(FAULTS) > 0
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -77,6 +82,8 @@ def ticket(request: Request, fid: str):
             status_code=404,
         )
     law = LAWS.get(fault.law_name, {})
+    solved_set = set(solved_list())
+    others_solved = all(f.id in solved_set for f in FAULTS if f.id != fid)
     return templates.TemplateResponse(
         request,
         "ticket.html",
@@ -85,6 +92,7 @@ def ticket(request: Request, fid: str):
             "law": law,
             "already_solved": is_solved(fid),
             "next_fault": _next_unsolved(exclude=fid),
+            "others_solved": others_solved,
         },
     )
 
@@ -120,6 +128,31 @@ def ticket_submit(fid: str, code: str = Form("")):
 @app.get("/badge/{law_name}", response_class=Response)
 def badge(law_name: str):
     return Response(content=lore.badge_svg(law_name), media_type="image/svg+xml")
+
+
+@app.get("/awakening", response_class=HTMLResponse)
+def awakening(request: Request):
+    if not _all_solved():
+        nxt = _next_unsolved()
+        return templates.TemplateResponse(
+            request,
+            "awakening.html",
+            {"ending": ENDING, "locked": True, "next_fid": nxt.id if nxt else None},
+        )
+    return templates.TemplateResponse(
+        request,
+        "awakening.html",
+        {"ending": ENDING, "locked": False, "next_fid": None},
+    )
+
+
+@app.get("/certificate", response_class=Response)
+def certificate():
+    if not _all_solved():
+        return Response("还没修完所有故障，毕业证还拿不了。", status_code=403)
+    solved = set(solved_list())
+    laws = [f.law_name for f in FAULTS if f.id in solved]
+    return Response(content=lore.certificate_svg(laws), media_type="image/svg+xml")
 
 
 @app.get("/lore", response_class=HTMLResponse)

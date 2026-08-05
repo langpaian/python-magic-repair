@@ -46,3 +46,7 @@ def laws_by_name() -> dict:
 
 def load_initiation() -> dict:
     return yaml.safe_load((CONTENT / "initiation" / "scenes.yaml").read_text(encoding="utf-8"))
+
+
+def load_ending() -> dict:
+    return yaml.safe_load((CONTENT / "awakening.yaml").read_text(encoding="utf-8"))

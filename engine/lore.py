@@ -23,3 +23,28 @@ def badge_svg(law_name: str, solved_date: str | None = None, accent: str = "#d4a
   <text x="150" y="225" text-anchor="middle" font-family="Georgia,serif" font-size="19" fill="#e8e0ff">{law_name}</text>
   <text x="150" y="338" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#8a7fb8">{date}</text>
 </svg>'''
+
+
+def certificate_svg(law_names: list[str], date: str | None = None) -> str:
+    """维修师之证：把化解过的法则写进一张毕业证。"""
+    date = date or datetime.now().strftime("%Y-%m-%d")
+    laws = " · ".join(law_names) if law_names else "（法则待填）"
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="620" height="440" viewBox="0 0 620 440">
+  <defs>
+    <linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1c1436"/>
+      <stop offset="100%" stop-color="#0e0a22"/>
+    </linearGradient>
+    <linearGradient id="cgold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5d98a"/>
+      <stop offset="100%" stop-color="#b98f2f"/>
+    </linearGradient>
+  </defs>
+  <rect width="620" height="440" rx="20" fill="url(#cbg)"/>
+  <rect x="14" y="14" width="592" height="412" rx="14" fill="none" stroke="url(#cgold)" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="310" y="86" text-anchor="middle" font-family="Georgia,serif" font-size="34" fill="#f5d98a" letter-spacing="6">魔法维修师之证</text>
+  <text x="310" y="130" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#a79fc8">—— 授予一名学会了倾听机器真话的人 ——</text>
+  <text x="310" y="200" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#ede7ff">已化解法则：</text>
+  <text x="310" y="252" text-anchor="middle" font-family="Georgia,serif" font-size="22" fill="#d8d0f0">{laws}</text>
+  <text x="310" y="330" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#8a7fb8">{date}</text>
+</svg>'''

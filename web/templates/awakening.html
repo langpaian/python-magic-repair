@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}觉醒 · 创造之权 · 魔法维修铺{% endblock %}
+{% block content %}
+{% if locked %}
+  <div class="awakening-page">
+    <h1 class="page-title">觉醒 · 创造之权</h1>
+    <div class="act">
+      <p class="spirit-talk">毕业证，只发给把这一批机器都修好的人。你还有任务单没化解。</p>
+      <div class="actions">
+        {% if next_fid %}
+          <a class="btn btn-primary" href="/ticket/{{ next_fid }}">去修这一单 →</a>
+        {% endif %}
+        <a class="btn btn-ghost" href="/">回大厅</a>
+      </div>
+    </div>
+  </div>
+{% else %}
+<div class="awakening-page">
+  <h1 class="page-title">{{ ending.title }}</h1>
+
+  <div class="epilogue spirit">
+    {% for line in ending.epilogue %}<p>{{ line }}</p>{% endfor %}
+  </div>
+
+  <section class="act">
+    <h2>🪄 自由施法场</h2>
+    <p class="hint">{{ ending.free_cast.hint }}</p>
+    <textarea id="cast-code" spellcheck="false">{{ ending.free_cast.placeholder }}</textarea>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="castSpell()">{{ ending.free_cast.button }}</button>
+    </div>
+    <pre id="cast-console" class="console" hidden></pre>
+    <div id="cast-spirit" class="spirit" hidden></div>
+  </section>
+
+  <section class="act certificate">
+    <h2>🎓 {{ ending.certificate.title }}</h2>
+    <img class="cert-img" src="/certificate" alt="魔法维修师之证">
+  </section>
+</div>
+{% endif %}
+{% endblock %}
+{% block script %}
+{% if not locked %}
+<script>
+const SUCCESS = {{ ending.free_cast.success_lines | tojson }};
+const FAIL = {{ ending.free_cast.failure_line | tojson }};
+
+async function castSpell() {
+  const res = await fetch('/cast', {
+    method: 'POST',
+    headers: {'Content-Type':'application/x-www-form-urlencoded'},
+    body: new URLSearchParams({code: document.getElementById('cast-code').value}),
+  });
+  const data = await res.json();
+  const c = document.getElementById('cast-console');
+  c.hidden = false;
+  c.textContent = (data.stdout || data.stderr || '(什么也没发生)');
+  c.classList.toggle('ok', data.ok);
+  const s = document.getElementById('cast-spirit');
+  s.hidden = false;
+  s.textContent = '老精灵：\n' + (data.ok ? SUCCESS.join('\n') : FAIL);
+}
+</script>
+{% endif %}
+{% endblock %}

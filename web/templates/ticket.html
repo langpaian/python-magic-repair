@@ -44,6 +44,8 @@
       <a class="btn btn-primary" href="/lore">回大厅 · 看法则图鉴</a>
       {% if next_fault %}
         <a class="btn btn-ghost" href="/ticket/{{ next_fault.id }}">下一单 →</a>
+      {% elif others_solved %}
+        <a class="btn btn-ghost" href="/awakening">🎓 觉醒 · 领取维修师之证 →</a>
       {% endif %}
     </div>
   </div>
