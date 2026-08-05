@@ -115,6 +115,20 @@ textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 1px var(--border);
 
 .actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 
+/* 参考答案：低调入口 + 答案卷轴 */
+.answer-row { margin-top: 10px; text-align: right; }
+.answer-link {
+  background: none; border: none; cursor: pointer; font-size: 12px;
+  color: var(--muted); opacity: .55; text-decoration: underline dotted;
+}
+.answer-link:hover { opacity: 1; color: var(--gold-dim); }
+.answer {
+  margin-top: 14px; padding: 14px; border-radius: 12px;
+  background: rgba(212,175,55,.07); border: 1px dashed rgba(212,175,55,.4);
+  color: #d8d0f0; white-space: pre-wrap; word-break: break-word;
+  font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 13px; line-height: 1.6;
+}
+
 /* 精灵与文案 */
 .spirit {
   margin-top: 14px; padding: 14px 16px; border-radius: 12px;

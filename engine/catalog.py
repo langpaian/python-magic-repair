@@ -22,6 +22,7 @@ class Fault:
         self.law_statement = task.get("law_statement", "")
         self.difficulty = task.get("difficulty", 1)
         self.buggy_code = (dir / "buggy.py").read_text(encoding="utf-8")
+        self.fixed_code = (dir / "fixed.py").read_text(encoding="utf-8") if (dir / "fixed.py").exists() else ""
         self.story_text = (dir / "story.md").read_text(encoding="utf-8") if (dir / "story.md").exists() else ""
 
 

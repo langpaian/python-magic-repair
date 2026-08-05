@@ -23,11 +23,15 @@
         <button class="btn btn-submit" onclick="submitFix()">✅ 提交修复</button>
         <button class="btn btn-ghost" onclick="showHint()">💡 听精灵的提示</button>
       </div>
+      <div class="answer-row">
+        <button class="answer-link" onclick="revealAnswer()">卡住了？看参考答案（会揭晓谜底，慎重）</button>
+      </div>
     </div>
     <div class="console-pane">
       <div class="pane-title">机器的回应</div>
       <pre id="console" class="console">……</pre>
       <div id="spirit" class="spirit" hidden></div>
+      <div id="answer" class="answer" hidden></div>
     </div>
   </div>
 </div>
@@ -56,6 +60,14 @@
 {% block script %}
 <script>
 const code = () => document.getElementById('code').value;
+const FIXED = {{ fault.fixed_code | tojson }};
+
+function revealAnswer() {
+  if (!confirm('参考答案会直接揭开谜底——确定现在就要看吗？\n\n（提示：就算看了答案，你之前读报错的过程也已经是你最大的收获了。）')) return;
+  const a = document.getElementById('answer');
+  a.hidden = false;
+  a.textContent = '参考答案：\n' + FIXED;
+}
 
 async function cast() {
   const res = await fetch('/ticket/{{ fault.id }}/run', {
