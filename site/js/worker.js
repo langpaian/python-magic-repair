@@ -59,7 +59,12 @@ self.onmessage = async (e) => {
       pyodide.FS.writeFile("solution.py", e.data.code);
       pyodide.FS.writeFile("tests.py", e.data.tests);
       try {
-        pyodide.runPython("import runpy; runpy.run_path('tests.py', run_name='__main__')");
+        // 关键：Pyodide 长驻进程会缓存已导入的模块。
+        // 先踢掉旧的 solution，保证 from solution import ... 拿到的是本次新写的代码。
+        pyodide.runPython(
+          "import sys; sys.modules.pop('solution', None); "
+          + "import runpy; runpy.run_path('tests.py', run_name='__main__')"
+        );
         self.postMessage({ id, type: "result", ok: true, stdout: readBuf() });
       } catch (err) {
         self.postMessage({ id, type: "result", ok: false, stdout: readBuf(), stderr: String(err.message || err) });
