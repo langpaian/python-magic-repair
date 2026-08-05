@@ -1,0 +1,22 @@
+# 法则分类学 —— 这个世界的自然法则（隐形的课程表）
+laws:
+  - id: zero-division
+    name: 零的禁忌
+    error: ZeroDivisionError
+    stage: 新手法师
+    statement: "除法不接受零的拜访——机器不猜测，它如实拒绝。"
+    adult_note: "ZeroDivisionError 从不说谎。当你说'除以零'，它就真的除以零。初学者觉得它坏，工程师知道那是忠诚。"
+
+  - id: room-number
+    name: 房间号必须存在
+    error: IndexError
+    stage: 新手法师
+    statement: "序列是严谨的房间号——机器不替你脑补，房间不存在它就如实告诉你。"
+    adult_note: "IndexError 是机器在说：'你给的地址，没有这个房间。'它不会替你猜你想要哪个。"
+
+  - id: name-whisper
+    name: 名字必须先被念过
+    error: NameError
+    stage: 新手法师
+    statement: "咒语里用到的名字，必须先被定义——机器不猜。"
+    adult_note: "NameError 是机器在说：'这个名字，你从没教过我。'变量的定义，就是念出它的名字。"

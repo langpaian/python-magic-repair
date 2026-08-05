@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}法则图鉴 · 魔法维修铺{% endblock %}
+{% block content %}
+<div class="lore-page">
+  <h1 class="page-title">法则图鉴</h1>
+  <p class="subtitle">这里收集的不是错误，而是机器说过的一句句真话。</p>
+  <p class="subtitle dim">已化解 {{ solved_count }} / {{ laws|length }} 条</p>
+
+  <div class="law-grid">
+    {% for law in laws %}
+      <div class="law-card {% if law.name in solved_laws %}law-lit{% else %}law-grey{% endif %}">
+        <div class="law-head">
+          <span class="law-name">{{ law.name }}</span>
+          <span class="law-stage">{{ law.stage }}</span>
+        </div>
+        {% if law.name in solved_laws %}
+          <p class="law-statement">{{ law.statement }}</p>
+          <p class="law-adult">{{ law.adult_note }}</p>
+          <img class="mini-badge" src="/badge/{{ law.name }}" alt="{{ law.name }}">
+        {% else %}
+          <p class="law-locked">？？？</p>
+          <p class="law-locked-sub">尚未化解 · 去听听机器怎么说</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

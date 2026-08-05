@@ -1,0 +1,8 @@
+[project]
+name = "python-magic-repair"
+version = "0.1.0"
+description = "Python 魔法维修铺 —— 游戏化修 Bug 学习"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

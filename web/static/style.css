@@ -1,0 +1,187 @@
+:root {
+  --bg1: #140f2b;
+  --bg2: #0d0a1f;
+  --card: rgba(30, 22, 60, 0.72);
+  --border: rgba(212, 175, 55, 0.35);
+  --gold: #f5d98a;
+  --gold-dim: #c49a3c;
+  --ink: #ede7ff;
+  --muted: #a79fc8;
+  --err: #ff8a7a;
+  --ok: #7dffc4;
+  --violet: #6b4fc0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: radial-gradient(1100px 560px at 72% -8%, #2a1a55, transparent), var(--bg1);
+  min-height: 100vh;
+}
+
+.night { position: relative; min-height: 100vh; }
+
+.stars {
+  position: fixed; inset: 0; pointer-events: none; opacity: .55;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, #fff, transparent 60%),
+    radial-gradient(1px 1px at 34% 8%, #ffd, transparent 60%),
+    radial-gradient(1.5px 1.5px at 58% 34%, #fdf, transparent 60%),
+    radial-gradient(1px 1px at 76% 14%, #fff, transparent 60%),
+    radial-gradient(1px 1px at 88% 42%, #cfd8ff, transparent 60%),
+    radial-gradient(1.5px 1.5px at 22% 66%, #ffe9b0, transparent 60%),
+    radial-gradient(1px 1px at 46% 82%, #fff, transparent 60%),
+    radial-gradient(1px 1px at 68% 72%, #e0c8ff, transparent 60%),
+    radial-gradient(1px 1px at 94% 88%, #fff, transparent 60%);
+  animation: twinkle 6s ease-in-out infinite alternate;
+}
+@keyframes twinkle { from { opacity: .35; } to { opacity: .7; } }
+
+.page { max-width: 980px; margin: 0 auto; padding: 24px 20px 80px; position: relative; z-index: 1; }
+
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 28px;
+}
+.brand { font-size: 20px; color: var(--gold); text-decoration: none; font-weight: 700; letter-spacing: 2px; }
+.links a { color: var(--muted); text-decoration: none; margin-left: 18px; font-size: 14px; }
+.links a:hover { color: var(--gold); }
+
+.foot {
+  position: fixed; bottom: 10px; width: 100%; text-align: center;
+  color: var(--muted); font-size: 12px; opacity: .65; z-index: 1;
+}
+
+/* 按钮 */
+.btn {
+  display: inline-block; padding: 10px 18px; border-radius: 10px;
+  border: 1px solid var(--border); background: transparent; color: var(--ink);
+  cursor: pointer; font-size: 15px; text-decoration: none; transition: all .15s;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 4px 18px rgba(212,175,55,.22); }
+.btn-primary {
+  background: linear-gradient(135deg, #6b4fc0, #462a87); border-color: transparent;
+  color: #fff; box-shadow: 0 0 24px rgba(107,79,192,.45);
+}
+.btn-run   { background: linear-gradient(135deg, #3f2d7a, #291b52); }
+.btn-submit{ background: linear-gradient(135deg, #1f6f4e, #13523a); border-color: rgba(125,255,196,.3); }
+.btn-ghost { color: var(--gold-dim); }
+
+/* 大厅 */
+.shop-name {
+  font-family: Georgia, "Songti SC", "Noto Serif SC", serif;
+  font-size: 46px; text-align: center; margin: 42px 0 6px;
+  color: var(--gold); text-shadow: 0 0 32px rgba(212,175,55,.4); letter-spacing: 4px;
+}
+.shop-tag { text-align: center; color: var(--muted); margin-bottom: 30px; letter-spacing: 2px; }
+.reputation { text-align: center; margin-bottom: 26px; }
+.rep-num { font-size: 36px; color: var(--gold); font-weight: 700; }
+.rep-label { display: block; color: var(--muted); margin-top: 2px; }
+.rep-done { display: inline-block; margin-top: 10px; color: var(--ok); }
+.door-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 38px; }
+
+.ticket-board h2 { color: var(--gold-dim); letter-spacing: 1px; font-size: 18px; }
+.ticket-card {
+  display: block; background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;
+  color: var(--ink); text-decoration: none; transition: all .15s;
+}
+.ticket-card:hover { border-color: var(--gold); transform: translateX(5px); }
+.ticket-done { opacity: .7; }
+.ticket-top { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; }
+.diff { color: var(--gold); letter-spacing: 1px; }
+.ticket-title { font-size: 18px; margin: 6px 0; }
+.stamp { font-size: 13px; color: var(--ok); }
+.stamp-todo { color: var(--gold-dim); }
+
+/* 编辑器与终端 */
+textarea, .console { font-family: "SF Mono", Menlo, Consolas, "Courier New", monospace; font-size: 13.5px; }
+textarea {
+  width: 100%; min-height: 220px; background: rgba(10,8,22,.88); color: #d6ecff;
+  border: 1px solid var(--border); border-radius: 12px; padding: 14px;
+  resize: vertical; line-height: 1.55; outline: none;
+}
+textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 1px var(--border); }
+.console {
+  background: rgba(10,8,22,.88); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px; min-height: 130px; white-space: pre-wrap; word-break: break-word;
+  color: var(--muted); line-height: 1.5;
+}
+.console.ok  { color: var(--ok); border-color: rgba(125,255,196,.3); }
+.console.err { color: var(--err); border-color: rgba(255,138,122,.35); }
+
+.actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+
+/* 精灵与文案 */
+.spirit {
+  margin-top: 14px; padding: 14px 16px; border-radius: 12px;
+  background: rgba(107,79,192,.14); border-left: 3px solid var(--violet);
+  color: #e3daff; white-space: pre-wrap; line-height: 1.75;
+}
+.spirit-talk { white-space: pre-wrap; line-height: 1.85; color: #d8d0f0; }
+
+/* 任务卡页 */
+.ticket-page .task-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px 20px; margin-bottom: 18px;
+}
+.task-card h1 { margin: 8px 0 6px; font-size: 24px; }
+.symptom { color: #d8d0f0; line-height: 1.7; }
+.solved-note { color: var(--ok); font-size: 14px; }
+
+.workshop { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; align-items: start; }
+@media (max-width: 760px) { .workshop { grid-template-columns: 1fr; } }
+.pane-title { font-size: 13px; color: var(--gold-dim); margin-bottom: 8px; letter-spacing: 1px; }
+.hint-line { color: var(--muted); margin-left: 6px; }
+
+/* 解锁浮层 */
+.overlay {
+  position: fixed; inset: 0; background: rgba(8,5,20,.82); display: flex;
+  align-items: center; justify-content: center; z-index: 50; padding: 20px;
+}
+.unlock-box {
+  background: linear-gradient(160deg, #221640, #120c28); border: 1px solid var(--gold);
+  border-radius: 20px; max-width: 520px; width: 100%; padding: 30px; text-align: center;
+  box-shadow: 0 0 60px rgba(212,175,55,.25);
+}
+.unlock-box h2 { color: var(--gold); margin-top: 0; letter-spacing: 2px; }
+.unlock-box h3 { margin: 10px 0 6px; }
+.law-statement { color: #d8d0f0; line-height: 1.7; }
+.story { text-align: left; background: rgba(255,255,255,.04); border-radius: 12px; padding: 14px 16px; margin: 14px 0; line-height: 1.75; }
+.story p { margin: 0 0 8px; }
+.story p:last-child { margin-bottom: 0; }
+.story b { color: var(--gold); }
+.adult-note { font-size: 13px; color: var(--muted); text-align: left; }
+.unlock-actions { display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+
+/* 启蒙仪式 */
+.initiation-page .act {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 22px; margin-bottom: 18px;
+}
+.initiation-page .act h2 { color: var(--gold-dim); margin-top: 0; letter-spacing: 1px; }
+.exp-row { display: flex; gap: 12px; margin: 14px 0; flex-wrap: wrap; }
+
+/* 图鉴 */
+.page-title { font-family: Georgia, "Songti SC", "Noto Serif SC", serif; color: var(--gold); margin: 10px 0 4px; letter-spacing: 2px; }
+.subtitle { color: var(--muted); margin: 4px 0; }
+.subtitle.dim { opacity: .8; }
+.law-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 22px; }
+.law-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px; transition: all .15s;
+}
+.law-card:hover { transform: translateY(-2px); }
+.law-lit { border-color: rgba(212,175,55,.6); box-shadow: 0 0 22px rgba(212,175,55,.12); }
+.law-grey { opacity: .65; }
+.law-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.law-name { font-size: 19px; color: var(--gold); }
+.law-stage { font-size: 12px; color: var(--muted); }
+.law-statement { color: #d8d0f0; line-height: 1.7; }
+.law-adult { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.mini-badge { width: 84px; margin-top: 10px; filter: drop-shadow(0 0 10px rgba(212,175,55,.3)); }
+.law-locked { font-size: 26px; color: var(--muted); letter-spacing: 6px; margin: 6px 0; }
+.law-locked-sub { font-size: 13px; color: var(--muted); }

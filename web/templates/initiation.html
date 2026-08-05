@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}启蒙仪式 · 魔法维修铺{% endblock %}
+{% block content %}
+<div class="initiation-page">
+  <h1 class="page-title">{{ init.title }}</h1>
+
+  <section class="act" id="act1">
+    <h2>{{ init.acts[0].title }}</h2>
+    <p class="spirit-talk">{{ init.acts[0].spirit_intro }}</p>
+    <textarea id="act1-code" spellcheck="false">{{ init.acts[0].preset_code }}</textarea>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="castAct1()">🪄 施法</button>
+    </div>
+    <pre id="act1-console" class="console" hidden></pre>
+    <div id="act1-after" class="spirit" hidden></div>
+  </section>
+
+  <section class="act" id="act2" hidden>
+    <h2>{{ init.acts[1].title }}</h2>
+    <p class="spirit-talk">{{ init.acts[1].spirit_intro }}</p>
+    <div class="exp-row">
+      {% for exp in init.acts[1].experiments %}
+        <button class="btn btn-ghost" onclick="castAct2({{ loop.index0 }})">⚡ {{ exp.label }}</button>
+      {% endfor %}
+    </div>
+    <pre id="act2-console" class="console" hidden></pre>
+    <div id="act2-after" class="spirit" hidden></div>
+    <div id="act2-both" class="spirit" hidden></div>
+  </section>
+
+  <section class="act" id="act3" hidden>
+    <h2>{{ init.acts[2].title }}</h2>
+    <p class="spirit-talk">{{ init.acts[2].spirit_intro }}</p>
+    <a class="btn btn-primary" href="/ticket/{{ init.acts[2].next_ticket }}">🔧 接下第一单</a>
+  </section>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+const expCodes = [
+  {% for exp in init.acts[1].experiments %}`{{ exp.code }}`,
+  {% endfor %}
+];
+const expAfter = [
+  {% for exp in init.acts[1].experiments %}`{{ exp.spirit_after }}`,
+  {% endfor %}
+];
+const bothAfter = `{{ init.acts[1].spirit_after_both }}`;
+const doneExp = new Set();
+
+async function castAct1() {
+  const res = await fetch('/cast', {
+    method: 'POST',
+    headers: {'Content-Type':'application/x-www-form-urlencoded'},
+    body: new URLSearchParams({code: document.getElementById('act1-code').value}),
+  });
+  const data = await res.json();
+  const c = document.getElementById('act1-console');
+  c.hidden = false;
+  c.textContent = (data.stdout || data.stderr || '(什么也没发生)');
+  c.classList.toggle('ok', data.ok);
+  if (data.ok) {
+    document.getElementById('act1-after').hidden = false;
+    document.getElementById('act1-after').textContent = '老精灵：\n' + `{{ init.acts[0].spirit_after }}`;
+    document.getElementById('act2').hidden = false;
+    document.getElementById('act2').scrollIntoView({behavior:'smooth'});
+  }
+}
+
+async function castAct2(i) {
+  const res = await fetch('/cast', {
+    method: 'POST',
+    headers: {'Content-Type':'application/x-www-form-urlencoded'},
+    body: new URLSearchParams({code: expCodes[i]}),
+  });
+  const data = await res.json();
+  const c = document.getElementById('act2-console');
+  c.hidden = false;
+  c.textContent = (data.stdout || data.stderr || '');
+  c.classList.toggle('ok', data.ok);
+  document.getElementById('act2-after').hidden = false;
+  document.getElementById('act2-after').textContent = '老精灵：\n' + expAfter[i];
+  doneExp.add(i);
+  if (doneExp.size >= 2) {
+    document.getElementById('act2-both').hidden = false;
+    document.getElementById('act2-both').textContent = '老精灵：\n' + bothAfter;
+    document.getElementById('act3').hidden = false;
+    document.getElementById('act3').scrollIntoView({behavior:'smooth'});
+  }
+}
+</script>
+{% endblock %}

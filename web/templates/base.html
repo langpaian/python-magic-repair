@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}魔法维修铺{% endblock %}</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="night">
+  <div class="stars"></div>
+  <main class="page">
+    <nav class="topbar">
+      <a class="brand" href="/">🔮 魔法维修铺</a>
+      <div class="links">
+        <a href="/initiation">启蒙仪式</a>
+        <a href="/lore">法则图鉴</a>
+      </div>
+    </nav>
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="foot">「机器不会撒谎，它只是比你诚实。」</footer>
+</div>
+{% block script %}{% endblock %}
+</body>
+</html>

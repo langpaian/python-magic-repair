@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}大厅 · 魔法维修铺{% endblock %}
+{% block content %}
+<div class="hall">
+  <h1 class="shop-name">魔法维修铺</h1>
+  <p class="shop-tag">倾听机器的真话 · 修补世界的缝隙</p>
+
+  <div class="reputation">
+    <span class="rep-num">{{ solved_count }} / {{ total_count }}</span>
+    <span class="rep-label">条法则已化解</span>
+    {% if solved_count == total_count and total_count > 0 %}
+      <div class="rep-done">你已经把这一批故障都修好了 —— 老师傅，下班吧。</div>
+    {% endif %}
+  </div>
+
+  <div class="door-row">
+    {% if solved_count == 0 %}
+      <a class="btn btn-primary" href="/initiation">推门进去 · 启蒙仪式</a>
+    {% else %}
+      <a class="btn btn-primary" href="/ticket/{{ next_fid }}">继续修单</a>
+    {% endif %}
+    <a class="btn btn-ghost" href="/lore">法则图鉴</a>
+  </div>
+
+  <div class="ticket-board">
+    <h2>今日任务单</h2>
+    {% for f in faults %}
+      <a class="ticket-card {% if f.id in solved %}ticket-done{% endif %}" href="/ticket/{{ f.id }}">
+        <div class="ticket-top">
+          <span class="customer">👤 {{ f.customer }}</span>
+          <span class="diff">{{ "★" * f.difficulty }}</span>
+        </div>
+        <div class="ticket-title">{{ f.title }}</div>
+        <div class="ticket-foot">
+          {% if f.id in solved %}
+            <span class="stamp">✓ 已化解 · {{ f.law_name }}</span>
+          {% else %}
+            <span class="stamp stamp-todo">待化解</span>
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
