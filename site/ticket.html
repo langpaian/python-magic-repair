@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>任务单 · 魔法维修铺</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="night">
+  <div class="stars"></div>
+  <main class="page">
+    <nav class="topbar">
+      <a class="brand" href="index.html">🔮 魔法维修铺</a>
+      <div class="links">
+        <a href="initiation.html">启蒙仪式</a>
+        <a href="outcomes.html">学习成果</a>
+        <a href="lore.html">法则图鉴</a>
+      </div>
+    </nav>
+    <div id="app"><p class="subtitle">正在取来任务单……</p></div>
+  </main>
+  <footer class="foot">「机器不会撒谎，它只是比你诚实。」</footer>
+</div>
+
+<div id="unlock" class="overlay" hidden>
+  <div class="unlock-box">
+    <button class="close-x" onclick="document.getElementById('unlock').hidden = true" aria-label="关闭">✕</button>
+    <h2>✨ 化解成功</h2>
+    <div id="unlock-badge"></div>
+    <h3 id="unlock-law"></h3>
+    <p id="unlock-statement" class="law-statement"></p>
+    <div id="unlock-story" class="story"></div>
+    <p id="unlock-note" class="adult-note"></p>
+    <div class="unlock-actions" id="unlock-actions"></div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/runner.js"></script>
+<script>
+App.ready().then((C) => {
+  const esc = App.esc;
+  const params = new URLSearchParams(location.search);
+  let fault = C.faults.find((f) => f.id === params.get("fault"));
+  if (!fault) fault = C.faults.find((f) => !App.isSolved(f.id)) || C.faults[0];
+  const law = C.laws[fault.law] || {};
+  const solved = App.isSolved(fault.id);
+  const othersSolved = C.faults.every((f) => f.id === fault.id || App.isSolved(f.id));
+  const nextFault = C.faults.find((f) => f.id !== fault.id && !App.isSolved(f.id));
+
+  document.getElementById("app").innerHTML =
+    '<div class="ticket-page">'
+    + '<div class="task-card">'
+    + '<div class="ticket-top"><span class="customer">👤 ' + esc(fault.customer) + '</span><span class="diff">' + "★".repeat(fault.difficulty) + '</span></div>'
+    + "<h1>" + esc(fault.title) + "</h1>"
+    + '<p class="symptom">' + esc(fault.law_statement) + "</p>"
+    + (solved ? '<p class="solved-note">✓ 你已化解此单，法则「' + esc(fault.law) + '」已收进图鉴。可以再修一次练练手。</p>' : "")
+    + "</div>"
+    + '<div class="workshop">'
+    + '<div class="editor-pane">'
+    + '<div class="pane-title">咒语原文<span class="hint-line">（改这里 · Tab 缩进）</span></div>'
+    + '<textarea id="code" spellcheck="false">' + esc(fault.buggy_code) + "</textarea>"
+    + '<div class="actions">'
+    + '<button class="btn btn-run" onclick="cast()">🪄 施法看看</button>'
+    + '<button class="btn btn-submit" onclick="submitFix()">✅ 提交修复</button>'
+    + '<button class="btn btn-ghost" onclick="showHint()">💡 听精灵的提示</button>'
+    + "</div>"
+    + '<div class="answer-row"><button class="answer-link" onclick="revealAnswer()">卡住了？看参考答案（会揭晓谜底，慎重）</button></div>'
+    + "</div>"
+    + '<div class="console-pane">'
+    + '<div class="pane-title">机器的回应 <span id="engine-state" style="color:#a79fc8;font-size:12px"></span></div>'
+    + '<pre id="console" class="console">……</pre>'
+    + '<div id="spirit" class="spirit" hidden></div>'
+    + '<div id="answer" class="answer" hidden></div>'
+    + "</div>"
+    + "</div>"
+    + "</div>";
+
+  Runner.init().then(() => {
+    const st = document.getElementById("engine-state");
+    if (st) st.textContent = "· 机器待命";
+  });
+
+  const code = () => document.getElementById("code").value;
+
+  window.cast = async () => {
+    const c = document.getElementById("console");
+    c.hidden = false;
+    c.textContent = "> 施法看看\n（正在唤醒机器……）";
+    c.className = "console";
+    const r = await Runner.run(code());
+    c.textContent = "> 施法看看\n" + (r.stdout || "") + (r.stderr ? (r.stdout ? "\n" : "") + r.stderr : "");
+    c.classList.add(r.ok ? "ok" : "err");
+  };
+
+  window.submitFix = async () => {
+    const c = document.getElementById("console");
+    c.hidden = false;
+    c.textContent = "> 提交修复\n（正在请机器验证……）";
+    c.className = "console";
+    const r = await Runner.judge(code(), fault.tests_code);
+    if (r.ok) {
+      App.markSolved(fault.id, code());
+      document.getElementById("unlock-badge").innerHTML = App.badgeSVG(fault.law);
+      document.getElementById("unlock-law").textContent = "法则 · " + fault.law;
+      document.getElementById("unlock-statement").textContent = law.statement || "";
+      document.getElementById("unlock-story").innerHTML = App.storyHTML(fault.story);
+      document.getElementById("unlock-note").textContent = law.adult_note || "";
+      const actions = [
+        '<a class="btn btn-primary" href="javascript:void(0)" onclick="downloadOutcome()">📄 下载本次学习成果</a>',
+        '<a class="btn btn-ghost" href="lore.html">法则图鉴</a>',
+      ];
+      if (nextFault) actions.push('<a class="btn btn-ghost" href="ticket.html?fault=' + nextFault.id + '">下一单 →</a>');
+      else if (othersSolved) actions.push('<a class="btn btn-ghost" href="awakening.html">🎓 觉醒 · 领取维修师之证 →</a>');
+      document.getElementById("unlock-actions").innerHTML = actions.join("");
+      document.getElementById("unlock").hidden = false;
+    } else {
+      c.textContent = "> 提交修复\n" + (r.stdout || "") + (r.stderr ? (r.stdout ? "\n" : "") + r.stderr : "");
+      c.classList.add("err");
+    }
+  };
+
+  window.downloadOutcome = () => {
+    const date = (App.progress()[fault.id] || {}).date || "";
+    App.download("magic-repair-outcome-" + fault.id + ".html", App.outcomeCardHTML(fault, App.solutionFor(fault.id), law, date));
+  };
+
+  window.showHint = () => {
+    const s = document.getElementById("spirit");
+    s.hidden = false;
+    s.textContent = "老精灵：\n" + (law.statement || "（这一单还没配法则卡。）");
+  };
+
+  window.revealAnswer = () => {
+    if (!confirm("参考答案会直接揭开谜底——确定现在就要看吗？\n\n（提示：就算看了答案，你之前读报错的过程也已经是你最大的收获了。）")) return;
+    const a = document.getElementById("answer");
+    a.hidden = false;
+    a.textContent = "参考答案：\n" + fault.fixed_code;
+  };
+});
+</script>
+</body>
+</html>

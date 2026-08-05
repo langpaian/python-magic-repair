@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>法则图鉴 · 魔法维修铺</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="night">
+  <div class="stars"></div>
+  <main class="page">
+    <nav class="topbar">
+      <a class="brand" href="index.html">🔮 魔法维修铺</a>
+      <div class="links">
+        <a href="initiation.html">启蒙仪式</a>
+        <a href="outcomes.html">学习成果</a>
+        <a href="lore.html">法则图鉴</a>
+      </div>
+    </nav>
+    <div id="app"><p class="subtitle">正在翻阅图鉴……</p></div>
+  </main>
+  <footer class="foot">「机器不会撒谎，它只是比你诚实。」</footer>
+</div>
+<script src="js/app.js"></script>
+<script>
+App.ready().then((C) => {
+  const esc = App.esc;
+  const laws = Object.values(C.laws);
+  const solvedLaws = C.faults.filter((f) => App.isSolved(f.id)).map((f) => f.law);
+  const solvedCount = solvedLaws.length;
+
+  const grid = laws.map((law) => {
+    const lit = solvedLaws.includes(law.name);
+    let body;
+    if (lit) {
+      body = '<p class="law-statement">' + esc(law.statement) + "</p>"
+        + '<p class="law-adult">' + esc(law.adult_note) + "</p>"
+        + '<img class="mini-badge" src="javascript:void(0)" data-law="' + esc(law.name) + '" alt="' + esc(law.name) + '">';
+    } else {
+      body = '<p class="law-locked">？？？</p><p class="law-locked-sub">尚未化解 · 去听听机器怎么说</p>';
+    }
+    return '<div class="law-card ' + (lit ? "law-lit" : "law-grey") + '">'
+      + '<div class="law-head"><span class="law-name">' + esc(law.name) + '</span><span class="law-stage">' + esc(law.stage) + '</span></div>'
+      + body
+      + "</div>";
+  }).join("");
+
+  document.getElementById("app").innerHTML =
+    '<div class="lore-page">'
+    + '<h1 class="page-title">法则图鉴</h1>'
+    + '<p class="subtitle">这里收集的不是错误，而是机器说过的一句句真话。</p>'
+    + '<p class="subtitle dim">已化解 ' + solvedCount + ' / ' + laws.length + " 条</p>"
+    + '<div class="law-grid">' + grid + "</div>"
+    + "</div>";
+
+  // 客户端生成徽章 SVG（替代后端路由）
+  document.querySelectorAll(".mini-badge").forEach((img) => {
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(App.badgeSVG(img.dataset.law));
+  });
+});
+</script>
+</body>
+</html>

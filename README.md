@@ -53,3 +53,14 @@ python scripts/validate_content.py   # 过质量门
 
 学习者代码只在本地子进程里跑（带超时、无网络特权）。不要直接把公网部署成
 "服务器跑任意代码"——公开部署需要沙箱（见设计文档）。
+
+## 公开试用版（GitHub Pages 静态版）
+
+`site/` 是一个**纯静态版本**：学习者代码通过 Pyodide 在**访问者自己的浏览器**里跑，
+不经过任何服务器，因此可以安全地放上 GitHub Pages 公开分享。
+
+- 重新编译静态数据：`python scripts/build_static.py`（生成 `site/data/content.json`）
+- 本地预览：`cd site && python -m http.server 8001`
+- 部署：推送到 GitHub 后，`.github/workflows/pages.yml` 会自动把 `site/` 发布到 Pages
+  （首次需在仓库 Settings → Pages 把 Source 设为 **GitHub Actions**）
+- 多 CDN 自动回退：Pyodide 从 jsdelivr / fastly / unpkg 依次加载，对国内访问更稳

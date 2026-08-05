@@ -54,6 +54,22 @@ def test_outcome_card_renders():
     assert "修好了" in card  # 学习者自己的修复会被写进成果卡
 
 
+def test_build_static_output_is_complete():
+    """静态版构建产物：content.json 必须包含全部故障/法则/仪式/结尾。"""
+    import json
+    import pathlib
+    import subprocess
+
+    root = pathlib.Path(__file__).resolve().parent.parent
+    subprocess.run([sys.executable, str(root / "scripts" / "build_static.py")], cwd=root, check=True)
+    data = json.loads((root / "site" / "data" / "content.json").read_text(encoding="utf-8"))
+    assert len(data["faults"]) == 10
+    assert len(data["laws"]) == 10
+    assert len(data["initiation"]["acts"]) == 3
+    assert data["ending"]["title"]
+    assert all(f.get("error_headline") for f in data["faults"])
+
+
 def test_ending_loads_and_certificate_renders():
     from engine import lore
     from engine.catalog import load_ending

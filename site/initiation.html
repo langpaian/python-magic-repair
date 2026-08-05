@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>启蒙仪式 · 魔法维修铺</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="night">
+  <div class="stars"></div>
+  <main class="page">
+    <nav class="topbar">
+      <a class="brand" href="index.html">🔮 魔法维修铺</a>
+      <div class="links">
+        <a href="initiation.html">启蒙仪式</a>
+        <a href="outcomes.html">学习成果</a>
+        <a href="lore.html">法则图鉴</a>
+      </div>
+    </nav>
+    <div id="app"><p class="subtitle">正在唤醒这台机器……（首次约需几秒）</p></div>
+  </main>
+  <footer class="foot">「机器不会撒谎，它只是比你诚实。」</footer>
+</div>
+<script src="js/app.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/runner.js"></script>
+<script>
+App.ready().then((C) => {
+  const esc = App.esc;
+  const A = C.initiation.acts;
+
+  function spirit(text) {
+    return '<div class="spirit">老精灵：\n' + esc(text).replace(/\n/g, "\n") + "</div>";
+  }
+
+  let doneExp = new Set();
+
+  document.getElementById("app").innerHTML =
+    '<h1 class="page-title">' + esc(C.initiation.title) + "</h1>"
+    + '<section class="act" id="act1">'
+    + "<h2>" + esc(A[0].title) + "</h2>"
+    + '<p class="spirit-talk">' + esc(A[0].spirit_intro) + "</p>"
+    + '<textarea id="act1-code" spellcheck="false">' + esc(A[0].preset_code) + "</textarea>"
+    + '<div class="actions"><button class="btn btn-primary" onclick="castAct1()">🪄 施法</button></div>'
+    + '<pre id="act1-console" class="console" hidden></pre>'
+    + '<div id="act1-after" hidden></div>'
+    + "</section>"
+    + '<section class="act" id="act2" hidden>'
+    + "<h2>" + esc(A[1].title) + "</h2>"
+    + '<p class="spirit-talk">' + esc(A[1].spirit_intro) + "</p>"
+    + '<div class="exp-row">' + A[1].experiments.map((e, i) => '<button class="btn btn-ghost" onclick="castAct2(' + i + ')">⚡ ' + esc(e.label) + "</button>").join("") + "</div>"
+    + '<pre id="act2-console" class="console" hidden></pre>'
+    + '<div id="act2-after" hidden></div>'
+    + '<div id="act2-both" hidden></div>'
+    + "</section>"
+    + '<section class="act" id="act3" hidden>'
+    + "<h2>" + esc(A[2].title) + "</h2>"
+    + '<p class="spirit-talk">' + esc(A[2].spirit_intro) + "</p>"
+    + '<a class="btn btn-primary" href="ticket.html?fault=' + A[2].next_ticket + '">🔧 接下第一单</a>'
+    + "</section>";
+
+  // 预热魔法引擎
+  Runner.init().then(() => {
+    const st = document.getElementById("engine-state");
+    if (st) st.textContent = "机器已待命";
+  });
+
+  window.castAct1 = async () => {
+    const code = document.getElementById("act1-code").value;
+    const c = document.getElementById("act1-console");
+    c.hidden = false;
+    c.textContent = "（正在唤醒机器……）";
+    const r = await Runner.run(code);
+    c.textContent = r.stdout || r.stderr || "（什么也没发生）";
+    c.classList.toggle("ok", r.ok);
+    if (r.ok) {
+      document.getElementById("act1-after").hidden = false;
+      document.getElementById("act1-after").innerHTML = spirit(A[0].spirit_after);
+      document.getElementById("act2").hidden = false;
+      document.getElementById("act2").scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  window.castAct2 = async (i) => {
+    const c = document.getElementById("act2-console");
+    c.hidden = false;
+    c.textContent = "（正在唤醒机器……）";
+    const r = await Runner.run(A[1].experiments[i].code);
+    c.textContent = r.stdout || r.stderr || "";
+    c.classList.toggle("ok", r.ok);
+    document.getElementById("act2-after").hidden = false;
+    document.getElementById("act2-after").innerHTML = spirit(A[1].experiments[i].spirit_after);
+    doneExp.add(i);
+    if (doneExp.size >= 2) {
+      document.getElementById("act2-both").hidden = false;
+      document.getElementById("act2-both").innerHTML = spirit(A[1].spirit_after_both);
+      document.getElementById("act3").hidden = false;
+      document.getElementById("act3").scrollIntoView({ behavior: "smooth" });
+    }
+  };
+});
+</script>
+</body>
+</html>

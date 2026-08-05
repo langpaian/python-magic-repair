@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>魔法维修铺</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="night">
+  <div class="stars"></div>
+  <main class="page">
+    <nav class="topbar">
+      <a class="brand" href="index.html">🔮 魔法维修铺</a>
+      <div class="links">
+        <a href="initiation.html">启蒙仪式</a>
+        <a href="outcomes.html">学习成果</a>
+        <a href="lore.html">法则图鉴</a>
+      </div>
+    </nav>
+    <div id="app"><p class="subtitle">铺子还在点灯……</p></div>
+  </main>
+  <footer class="foot">「机器不会撒谎，它只是比你诚实。」</footer>
+</div>
+<script src="js/app.js"></script>
+<script>
+App.ready().then((C) => {
+  const esc = App.esc;
+  const solved = App.solvedList();
+  const total = C.faults.length;
+  const solvedCount = solved.length;
+  const next = C.faults.find((f) => !App.isSolved(f.id));
+  const allDone = solvedCount === total && total > 0;
+
+  const door = next
+    ? '<a class="btn btn-primary" href="ticket.html?fault=' + next.id + '">继续修单</a>'
+    : solvedCount === 0
+      ? '<a class="btn btn-primary" href="initiation.html">推门进去 · 启蒙仪式</a>'
+      : '<a class="btn btn-primary" href="awakening.html">觉醒 · 领取维修师之证</a>';
+
+  const cards = C.faults.map((f) => {
+    const done = App.isSolved(f.id);
+    return '<a class="ticket-card ' + (done ? 'ticket-done' : '') + '" href="ticket.html?fault=' + f.id + '">'
+      + '<div class="ticket-top"><span class="customer">👤 ' + esc(f.customer) + '</span><span class="diff">' + "★".repeat(f.difficulty) + '</span></div>'
+      + '<div class="ticket-title">' + esc(f.title) + '</div>'
+      + '<div class="ticket-foot">' + (done ? '<span class="stamp">✓ 已化解 · ' + esc(f.law) + '</span>' : '<span class="stamp stamp-todo">待化解</span>') + '</div>'
+      + '</a>';
+  }).join("");
+
+  document.getElementById("app").innerHTML =
+    '<div class="hall">'
+    + '<h1 class="shop-name">魔法维修铺</h1>'
+    + '<p class="shop-tag">倾听机器的真话 · 修补世界的缝隙</p>'
+    + '<div class="reputation"><span class="rep-num">' + solvedCount + ' / ' + total + '</span><span class="rep-label">条法则已化解</span>'
+    + (allDone ? '<div class="rep-done">你把这批故障都修好了——机器说的每一句真话，你都听懂了。</div>' : '') + '</div>'
+    + '<div class="door-row">' + door + '<a class="btn btn-ghost" href="lore.html">法则图鉴</a></div>'
+    + '<div class="ticket-board"><h2>今日任务单</h2>' + cards + '</div>'
+    + '</div>';
+});
+</script>
+</body>
+</html>

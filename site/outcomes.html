@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学习成果 · 魔法维修铺</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="night">
+  <div class="stars"></div>
+  <main class="page">
+    <nav class="topbar">
+      <a class="brand" href="index.html">🔮 魔法维修铺</a>
+      <div class="links">
+        <a href="initiation.html">启蒙仪式</a>
+        <a href="outcomes.html">学习成果</a>
+        <a href="lore.html">法则图鉴</a>
+      </div>
+    </nav>
+    <div id="app"><p class="subtitle">正在整理你的成果……</p></div>
+  </main>
+  <footer class="foot">「机器不会撒谎，它只是比你诚实。」</footer>
+</div>
+<script src="js/app.js"></script>
+<script>
+App.ready().then((C) => {
+  const esc = App.esc;
+  const prog = App.progress();
+  const records = Object.keys(prog).sort().map((fid) => {
+    const f = C.faults.find((x) => x.id === fid);
+    return f ? { fid, fault: f, solution: prog[fid].solution, date: prog[fid].date } : null;
+  }).filter(Boolean);
+
+  let inner;
+  if (records.length) {
+    const cards = records.map((r) => {
+      const law = C.laws[r.fault.law] || {};
+      return '<div class="outcome-card">'
+        + '<div class="law-head"><span class="law-name">' + esc(r.fault.law) + '</span><span class="law-stage">' + esc(r.date) + '</span></div>'
+        + '<div class="outcome-title">' + esc(r.fault.title) + "</div>"
+        + '<p class="outcome-err">报错：<span class="err-text">' + esc(r.fault.error_headline) + "</span></p>"
+        + '<div class="actions">'
+        + '<button class="btn btn-ghost" onclick="downloadOne(\'' + r.fid + '\')">📄 下载本次成果</button>'
+        + '<a class="btn btn-ghost" href="ticket.html?fault=' + r.fid + '">重修</a>'
+        + "</div></div>";
+    }).join("");
+    inner = '<div class="actions" style="margin:18px 0"><button class="btn btn-primary" onclick="downloadAll()">📥 下载全部学习档案</button><a class="btn btn-ghost" href="index.html">回大厅</a></div>'
+      + '<div class="law-grid">' + cards + "</div>";
+  } else {
+    inner = '<div class="act"><p class="spirit-talk">你还没化解任何故障。先去修一单——你的学习成果会在这里等你。</p>'
+      + '<a class="btn btn-primary" href="initiation.html">推门进去</a></div>';
+  }
+
+  document.getElementById("app").innerHTML =
+    '<div class="outcomes-page">'
+    + '<h1 class="page-title">我的学习成果</h1>'
+    + '<p class="subtitle">这里是你化解过的每一单——你读懂的报错、你写下的修复。都可以下载带走。</p>'
+    + inner
+    + "</div>";
+
+  window.downloadOne = (fid) => {
+    const f = C.faults.find((x) => x.id === fid);
+    const law = C.laws[f.law] || {};
+    App.download("magic-repair-outcome-" + fid + ".html", App.outcomeCardHTML(f, prog[fid].solution, law, prog[fid].date));
+  };
+
+  window.downloadAll = () => {
+    App.download("my-magic-repair-learning-portfolio.html", App.portfolioHTML(C, records.map((r) => ({ fid: r.fid, solution: r.solution, date: r.date }))));
+  };
+});
+</script>
+</body>
+</html>
