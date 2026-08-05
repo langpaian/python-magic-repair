@@ -1,17 +1,85 @@
 """学习成果：把化解过的故障变成可下载的成果档案。
 
-让学习留下看得见的东西——每修完一单，你都能带走一张"成果卡"：
-上面有你读懂的报错、你写下的修复、你掌握的法则。全部学完，还有一整份学习档案。
+一张会旋转的动态卡片——正面是法则徽章，悬停翻转，背面是你读懂的报错、
+你写下的修复与事故卷轴。自带星空、漂浮、光泽扫过、徽章呼吸等动画。
 """
 import html
 from datetime import datetime
 
 from engine import lore, runtime
 
+_OUTCOME_CSS = """
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 18px; padding: 30px 14px 70px;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; color: #ede7ff;
+    background: radial-gradient(1100px 600px at 25% 0%, #2a1a55, transparent), #0d0a1f;
+    overflow-x: hidden; }
+  .stars { position: fixed; inset: 0; pointer-events: none; opacity: .6;
+    background-image:
+      radial-gradient(1.5px 1.5px at 12% 22%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 34% 8%, #ffd, transparent 60%),
+      radial-gradient(1.5px 1.5px at 58% 34%, #fdf, transparent 60%),
+      radial-gradient(1px 1px at 76% 14%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 88% 42%, #cfd8ff, transparent 60%),
+      radial-gradient(1.5px 1.5px at 22% 66%, #ffe9b0, transparent 60%),
+      radial-gradient(1px 1px at 46% 82%, #fff, transparent 60%);
+    animation: twinkle 7s ease-in-out infinite alternate; }
+  @keyframes twinkle { from { opacity: .3; } to { opacity: .7; } }
+
+  .grid { display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; max-width: 1400px; }
+  .scene { perspective: 1500px; width: 430px; max-width: 92vw; animation: float 7s ease-in-out infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .card { position: relative; width: 100%; height: 570px; transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(.4, .2, .2, 1); }
+  .scene:hover .card { transform: rotateY(180deg); }
+  .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: 22px; padding: 28px 30px;
+    background: linear-gradient(160deg, #241a48, #100b26);
+    border: 1px solid rgba(212,175,55,.55);
+    box-shadow: 0 0 70px rgba(107,79,192,.4), inset 0 0 60px rgba(107,79,192,.08); overflow: hidden; }
+  .front { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .front::before { content: ""; position: absolute; top: -40%; left: -60%; width: 55%; height: 220%;
+    background: linear-gradient(115deg, transparent, rgba(255,255,255,.09), transparent);
+    transform: rotate(22deg); animation: shine 4.5s ease-in-out infinite; }
+  @keyframes shine { 0%, 55% { left: -60%; } 100% { left: 160%; } }
+  .back { transform: rotateY(180deg); overflow-y: auto; }
+  .back::-webkit-scrollbar { width: 6px; }
+  .back::-webkit-scrollbar-thumb { background: rgba(212,175,55,.3); border-radius: 3px; }
+
+  .kicker { color: #8a7fb8; font-size: 13px; letter-spacing: 3px; margin-bottom: 18px; }
+  .badge svg { width: 175px; filter: drop-shadow(0 0 26px rgba(212,175,55,.45));
+    animation: pulse 3s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+  .big { margin: 14px 0 4px; color: #f5d98a; font-size: 30px;
+    font-family: Georgia, "Songti SC", serif; letter-spacing: 2px; }
+  .sub { color: #a79fc8; font-size: 13px; margin: 0; }
+  .hint { color: #8a7fb8; font-size: 12px; margin-top: 18px; }
+
+  h2 { margin: 0 0 4px; font-size: 20px; }
+  h3 { margin: 16px 0 6px; color: #c49a3c; font-size: 13px; letter-spacing: 1px; }
+  .customer { color: #a79fc8; font-size: 13px; margin: 0; }
+  .stmt { color: #e3daff; line-height: 1.7; }
+  .adult { color: #a79fc8; font-size: 13px; line-height: 1.7; }
+  pre { background: #0b0818; border: 1px solid rgba(212,175,55,.25); border-radius: 10px; padding: 12px;
+    font-family: Menlo, Consolas, monospace; font-size: 12px; white-space: pre-wrap; word-break: break-word;
+    color: #d6ecff; line-height: 1.55; }
+  pre.err { color: #ff8a7a; }
+  .story { color: #d8d0f0; line-height: 1.8; }
+  .story b { color: #f5d98a; }
+  .story p { margin: 0 0 8px; }
+  .cert-wrap { text-align: center; margin-top: 40px; }
+  .cert-wrap svg { max-width: 92vw; height: auto; filter: drop-shadow(0 0 30px rgba(212,175,55,.3)); }
+  .foot { position: fixed; bottom: 14px; width: 100%; text-align: center; color: #a79fc8; font-size: 12px; opacity: .75; }
+"""
+
+
+def _esc(s) -> str:
+    return html.escape(str(s))
+
 
 def _md_bold(text: str) -> str:
-    """把 **加粗** 转成 <b>（先转义防注入）。"""
-    parts = html.escape(text).split("**")
+    parts = _esc(text).split("**")
     out = []
     for i, part in enumerate(parts):
         out.append(f"<b>{part}</b>" if i % 2 == 1 else part)
@@ -32,80 +100,65 @@ def error_headline(buggy_code: str) -> str:
     return "（它居然没报错？那问题藏在'答错了'里。）"
 
 
-_STYLES = """
-  * { box-sizing: border-box; }
-  body { margin: 0; background: #0e0a22; color: #ede7ff; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; padding: 40px 20px; }
-  .doc { max-width: 700px; margin: 0 auto; }
-  h1 { color: #f5d98a; letter-spacing: 3px; margin: 0 0 4px; font-size: 24px; }
-  h2 { color: #ede7ff; margin: 0 0 6px; font-size: 20px; }
-  h3 { color: #c49a3c; letter-spacing: 2px; margin: 20px 0 8px; font-size: 13px; }
-  .meta, .customer { color: #a79fc8; font-size: 13px; margin: 2px 0 0; }
-  .stmt { color: #e3daff; line-height: 1.7; }
-  .adult { color: #a79fc8; font-size: 13px; line-height: 1.7; }
-  pre { background: #0b0818; border: 1px solid rgba(212,175,55,.25); border-radius: 10px; padding: 14px; font-family: Menlo, Consolas, monospace; font-size: 12.5px; white-space: pre-wrap; word-break: break-word; color: #d6ecff; line-height: 1.55; }
-  .err pre { color: #ff8a7a; }
-  .story { color: #d8d0f0; line-height: 1.8; }
-  .story b { color: #f5d98a; }
-  .story p { margin: 0 0 8px; }
-  .badge { text-align: center; margin-top: 12px; }
-  .card { background: #1a1130; border: 1px solid rgba(212,175,55,.4); border-radius: 16px; padding: 28px 30px; margin-bottom: 26px; }
-  .foot { text-align: center; color: #a79fc8; font-size: 12px; margin-top: 30px; }
-"""
+def _card_markup(fault, learner_solution: str, law: dict, date: str = "") -> str:
+    stars = "★" * int(fault.difficulty or 1)
+    badge = lore.badge_svg(fault.law_name)
+    return f"""<div class="scene"><div class="card">
+  <div class="face front">
+    <div class="kicker">魔法维修 · 学习成果</div>
+    <div class="badge">{badge}</div>
+    <div class="big">{_esc(fault.law_name)}</div>
+    <div class="sub">化解日期 {_esc(date)} · 难度 {stars}</div>
+    <div class="hint">悬停翻转 · 看这单的报错与你写的修复</div>
+  </div>
+  <div class="face back">
+    <h2>{_esc(fault.title)}</h2>
+    <p class="customer">客人：{_esc(fault.customer)}</p>
+    <h3>法则</h3>
+    <p class="stmt">{_esc(law.get("statement", ""))}</p>
+    <p class="adult">{_esc(law.get("adult_note", ""))}</p>
+    <h3>你读懂的报错</h3>
+    <pre class="err">{_esc(error_headline(fault.buggy_code))}</pre>
+    <h3>你的修复 · 你写下的咒语</h3>
+    <pre>{_esc(learner_solution or "（你的修复当时没有被保存下来。）")}</pre>
+    <h3>事故卷轴</h3>
+    <div class="story">{_story_html(fault.story_text)}</div>
+  </div>
+</div></div>"""
+
+
+def _page(title: str, body: str) -> str:
+    return f"""<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<title>{_esc(title)}</title>
+<style>{_OUTCOME_CSS}</style></head>
+<body>
+<div class="stars"></div>
+{body}
+<div class="foot">「机器不会撒谎，它只是比你诚实。」—— 魔法维修铺</div>
+</body></html>"""
 
 
 def outcome_card_html(fault, learner_solution: str, law: dict, date: str = "") -> str:
-    title = html.escape(fault.title)
-    customer = html.escape(fault.customer)
-    law_name = html.escape(law.get("name", ""))
-    statement = html.escape(law.get("statement", ""))
-    adult = html.escape(law.get("adult_note", ""))
-    err = html.escape(error_headline(fault.buggy_code))
-    sol = html.escape(learner_solution or "（你的修复当时没有被保存下来。）")
-    stars = "★" * int(fault.difficulty)
-    badge = lore.badge_svg(fault.law_name)
-    return f"""<div class="card">
-  <h2>{title}</h2>
-  <p class="customer">客人：{customer} · 化解日期：{date} · 难度 {stars}</p>
-  <h3>法则 · {law_name}</h3>
-  <p class="stmt">{statement}</p>
-  <p class="adult">{adult}</p>
-  <h3>你读懂的报错</h3>
-  <pre class="err">{err}</pre>
-  <h3>你的修复 · 你写下的咒语</h3>
-  <pre>{sol}</pre>
-  <h3>事故卷轴</h3>
-  <div class="story">{_story_html(fault.story_text)}</div>
-  <div class="badge">{badge}</div>
-</div>"""
+    """单张学习成果：一张旋转的动态卡片。"""
+    return _page("学习成果 · " + fault.law_name, _card_markup(fault, learner_solution, law, date))
 
 
 def portfolio_html(faults, records, laws, all_done: bool) -> str:
-    """全部学习成果；若全部化解，末尾附维修师之证。"""
-    cards = []
-    solved_ids = set()
+    """全部学习成果：一排会翻转的卡片；全部化解时末尾附维修师之证。"""
+    cards: list[str] = []
+    solved_ids: set[str] = set()
     for fid, solution, solved_at in records:
         solved_ids.add(fid)
         f = next((x for x in faults if x.id == fid), None)
-        if not f:
-            continue
-        cards.append(outcome_card_html(f, solution, laws.get(f.law_name, {}), date=str(solved_at)[:10]))
+        if f:
+            cards.append(_card_markup(f, solution, laws.get(f.law_name, {}), str(solved_at)[:10]))
 
     date = datetime.now().strftime("%Y-%m-%d")
     cert = ""
     if all_done and cards:
         solved_laws = [f.law_name for f in faults if f.id in solved_ids]
-        cert = (
-            '<div class="card" style="text-align:center">'
-            f"<h3>维修师之证</h3>{lore.certificate_svg(solved_laws, date)}</div>"
-        )
+        cert = f'<div class="cert-wrap">{lore.certificate_svg(solved_laws, date)}</div>'
 
-    return f"""<!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"><title>我的魔法维修 · 学习档案</title>
-<style>{_STYLES}</style></head>
-<body><div class="doc">
-  <h1>我的魔法维修 · 学习档案</h1>
-  <p class="meta">化解法则 {len(cards)} 条 · 记录于 {date}</p>
-  {''.join(cards)}
-  {cert}
-  <p class="foot">「机器不会撒谎，它只是比你诚实。」—— 魔法维修铺</p>
-</div></body></html>"""
+    body = f'<div class="grid">{"".join(cards)}</div>{cert}'
+    return _page("我的魔法维修 · 学习档案", body)
