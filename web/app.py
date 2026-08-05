@@ -28,6 +28,14 @@ INIT = load_initiation()
 ENDING = load_ending()
 
 
+@app.middleware("http")
+async def no_cache(request: Request, call_next):
+    """开发期不让浏览器缓存，避免旧 CSS/HTML 造成的"看着没修好"问题。"""
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-store"
+    return response
+
+
 def _fault(fid: str):
     # 容错：/ticket/1 与 /ticket/001 都能找到同一单（id 统一补零）
     for candidate in (fid, fid.zfill(3)):

@@ -144,10 +144,16 @@ textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 1px var(--border);
   align-items: center; justify-content: center; z-index: 50; padding: 20px;
 }
 .unlock-box {
+  position: relative;
   background: linear-gradient(160deg, #221640, #120c28); border: 1px solid var(--gold);
   border-radius: 20px; max-width: 520px; width: 100%; padding: 30px; text-align: center;
   box-shadow: 0 0 60px rgba(212,175,55,.25);
 }
+.close-x {
+  position: absolute; top: 8px; right: 14px; background: none; border: none;
+  color: var(--muted); font-size: 20px; cursor: pointer; line-height: 1;
+}
+.close-x:hover { color: var(--gold); }
 .unlock-box h2 { color: var(--gold); margin-top: 0; letter-spacing: 2px; }
 .unlock-box h3 { margin: 10px 0 6px; }
 .law-statement { color: #d8d0f0; line-height: 1.7; }
