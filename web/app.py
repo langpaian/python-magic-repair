@@ -215,6 +215,10 @@ def outcomes_download():
 def lore_page(request: Request):
     solved = solved_list()
     solved_laws = {f.law_name for f in FAULTS if f.id in solved}
+    # 每条法则对应到第一个还没点过的故障，让图鉴卡片能点进去做题
+    fid_by_law = {}
+    for f in FAULTS:
+        fid_by_law.setdefault(f.law_name, f.id)
     return templates.TemplateResponse(
         request,
         "lore.html",
@@ -222,5 +226,6 @@ def lore_page(request: Request):
             "laws": list(LAWS.values()),
             "solved_laws": solved_laws,
             "solved_count": len(solved_laws),
+            "fid_by_law": fid_by_law,
         },
     )

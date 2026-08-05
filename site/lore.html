@@ -30,6 +30,10 @@ App.ready().then((C) => {
   const solvedLaws = C.faults.filter((f) => App.isSolved(f.id)).map((f) => f.law);
   const solvedCount = solvedLaws.length;
 
+  // 每条法则 → 对应一个故障，让图鉴卡片能点进去做题
+  const lawToFault = {};
+  C.faults.forEach((f) => { if (!lawToFault[f.law]) lawToFault[f.law] = f.id; });
+
   const grid = laws.map((law) => {
     const lit = solvedLaws.includes(law.name);
     let body;
@@ -40,10 +44,11 @@ App.ready().then((C) => {
     } else {
       body = '<p class="law-locked">？？？</p><p class="law-locked-sub">尚未化解 · 去听听机器怎么说</p>';
     }
-    return '<div class="law-card ' + (lit ? "law-lit" : "law-grey") + '">'
+    return '<a class="law-card ' + (lit ? "law-lit" : "law-grey") + '" href="ticket.html?fault=' + (lawToFault[law.name] || "") + '">'
       + '<div class="law-head"><span class="law-name">' + esc(law.name) + '</span><span class="law-stage">' + esc(law.stage) + '</span></div>'
       + body
-      + "</div>";
+      + '<span class="law-action">' + (lit ? "再练一次 →" : "去化解这一单 →") + '</span>'
+      + "</a>";
   }).join("");
 
   document.getElementById("app").innerHTML =

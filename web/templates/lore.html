@@ -8,7 +8,7 @@
 
   <div class="law-grid">
     {% for law in laws %}
-      <div class="law-card {% if law.name in solved_laws %}law-lit{% else %}law-grey{% endif %}">
+      <a class="law-card {% if law.name in solved_laws %}law-lit{% else %}law-grey{% endif %}" href="/ticket/{{ fid_by_law.get(law.name, '') }}">
         <div class="law-head">
           <span class="law-name">{{ law.name }}</span>
           <span class="law-stage">{{ law.stage }}</span>
@@ -21,7 +21,8 @@
           <p class="law-locked">？？？</p>
           <p class="law-locked-sub">尚未化解 · 去听听机器怎么说</p>
         {% endif %}
-      </div>
+        <span class="law-action">{% if law.name in solved_laws %}再练一次 →{% else %}去化解这一单 →{% endif %}</span>
+      </a>
     {% endfor %}
   </div>
 </div>

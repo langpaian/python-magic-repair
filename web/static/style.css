@@ -192,10 +192,16 @@ textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 1px var(--border);
 .subtitle.dim { opacity: .8; }
 .law-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 22px; }
 .law-card {
+  display: block; text-decoration: none; color: var(--ink);
   background: var(--card); border: 1px solid var(--border); border-radius: 14px;
   padding: 18px; transition: all .15s;
 }
-.law-card:hover { transform: translateY(-2px); }
+.law-card:hover { transform: translateY(-2px); border-color: rgba(212,175,55,.6); }
+.law-action {
+  display: inline-block; margin-top: 10px; font-size: 13px;
+  color: var(--gold-dim); border-bottom: 1px dotted rgba(212,175,55,.4);
+}
+.law-card:hover .law-action { color: var(--gold); }
 .law-lit { border-color: rgba(212,175,55,.6); box-shadow: 0 0 22px rgba(212,175,55,.12); }
 .law-grey { opacity: .65; }
 .law-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
