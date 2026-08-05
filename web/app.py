@@ -29,7 +29,12 @@ ENDING = load_ending()
 
 
 def _fault(fid: str):
-    return next((f for f in FAULTS if f.id == fid), None)
+    # 容错：/ticket/1 与 /ticket/001 都能找到同一单（id 统一补零）
+    for candidate in (fid, fid.zfill(3)):
+        f = next((f for f in FAULTS if f.id == candidate), None)
+        if f:
+            return f
+    return None
 
 
 def _next_unsolved(exclude: str | None = None):
