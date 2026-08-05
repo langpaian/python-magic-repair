@@ -186,6 +186,16 @@ textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 1px var(--border);
 .law-locked { font-size: 26px; color: var(--muted); letter-spacing: 6px; margin: 6px 0; }
 .law-locked-sub { font-size: 13px; color: var(--muted); }
 
+/* 学习成果 */
+.outcome-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px; transition: all .15s;
+}
+.outcome-card:hover { transform: translateY(-2px); border-color: rgba(212,175,55,.6); }
+.outcome-title { font-size: 16px; margin: 4px 0 8px; line-height: 1.5; }
+.outcome-err { color: var(--muted); font-size: 13px; line-height: 1.6; margin: 0 0 12px; }
+.err-text { color: var(--err); font-family: Menlo, Consolas, monospace; }
+
 /* 觉醒 · 创造之权 */
 .awakening-page .act {
   background: var(--card); border: 1px solid var(--border); border-radius: 16px;

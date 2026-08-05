@@ -20,3 +20,52 @@ laws:
     stage: 新手法师
     statement: "咒语里用到的名字，必须先被定义——机器不猜。"
     adult_note: "NameError 是机器在说：'这个名字，你从没教过我。'变量的定义，就是念出它的名字。"
+
+  - id: type-order
+    name: 万物分门别类
+    error: TypeError
+    stage: 新手法师
+    statement: "数字和文字是两种东西——机器不假装它们能结婚。"
+    adult_note: "TypeError 是机器在说：'你给我的东西，不是我要的那一种。'字符串 + 整数，它不会替你悄悄转换。要用 str() 或 f-string 把话说清楚。"
+
+  - id: key-exists
+    name: 钥匙要存在
+    error: KeyError
+    stage: 新手法师
+    statement: "宝箱要有钥匙才能开——机器不猜哪把钥匙是你要的。"
+    adult_note: "KeyError 是机器在说：'这把钥匙，打不开这个宝箱。'字典里没有的键，别直接下标硬闯，用 .get(key, 默认值) 给条后路。"
+
+  - id: indent-skeleton
+    name: 缩进是咒语的骨架
+    error: IndentationError
+    stage: 新手法师
+    statement: "机器的世界没有'差不多'——缩进差一格，意思就变。"
+    adult_note: "IndentationError 是机器在说：'你的咒语骨架断了。'在 Python 里，缩进不是排版，是结构本身。"
+
+  - id: method-not-spell
+    name: 方法不是咒语本身
+    error: TypeError
+    stage: 见习维修师
+    statement: "调用的方法做完事就走了，它不把结果塞回你手里。"
+    adult_note: "list.append() 会修改列表并返回 None。写 bag = shopping.append(x)，bag 就成了 None。方法做事，但不回头。"
+
+  - id: birth-memory
+    name: 记忆只存在于诞生的那一刻
+    error: ""
+    stage: 见习维修师
+    statement: "你以为的'每次'，对机器是'唯一的一次'——默认值只在出生时被记住一次。"
+    adult_note: "可变对象做默认参数是最著名的陷阱：def f(x, lst=[])，那个 [] 只创建一次，之后每次调用都共用它。标准解法：默认值用 None，函数里再新建。"
+
+  - id: wall-law
+    name: 墙的法则
+    error: UnboundLocalError
+    stage: 见习维修师
+    statement: "咒语看不见墙外的变量——机器只忠于它所在的那一层。"
+    adult_note: "在函数里给变量赋值，Python 就认为它是'墙内'局部变量，于是赋值前引用它就报 UnboundLocalError。想改全局要声明 global。"
+
+  - id: same-value
+    name: 相不相同要看值
+    error: ""
+    stage: 见习维修师
+    statement: "`==` 看值相不相同，`is` 看是不是同一个——机器从不把两者混淆，你却会。"
+    adult_note: "对列表这类可变对象，is 几乎总是 False，因为它问的是'是不是同一个对象'。比较内容用 ==，is 只该用于 None 或单例。"

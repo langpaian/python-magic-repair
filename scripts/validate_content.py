@@ -19,7 +19,8 @@ import yaml
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 CONTENT = ROOT / "content"
 
-REQUIRED_FIELDS = ("id", "title", "customer", "law", "law_statement", "expected_error")
+# expected_error 对逻辑型故障是可选的（没有它就用隐藏测试判故障是否成立）
+REQUIRED_FIELDS = ("id", "title", "customer", "law", "law_statement")
 
 
 def run(args, timeout=10.0, cwd=None):
@@ -38,6 +39,18 @@ def check_fixed_passes(fid, d):
     return None
 
 
+def check_code_fails_tests(fid, d, filename):
+    """逻辑型故障：把指定文件当 solution 跑 tests.py，必须判失败。"""
+    with tempfile.TemporaryDirectory() as td:
+        td = pathlib.Path(td)
+        shutil.copy(d / filename, td / "solution.py")
+        shutil.copy(d / "tests.py", td / "tests.py")
+        r = run([sys.executable, "tests.py"], cwd=td)
+        if r.returncode == 0:
+            return f"[{fid}] {filename} 竟然通过了 tests.py —— 故障不成立"
+    return None
+
+
 def main() -> int:
     errors: list[str] = []
     checked = 0
@@ -53,7 +66,7 @@ def main() -> int:
             errors.append(f"[{d.name}] task.yaml 解析失败: {e}")
             continue
 
-        fid = str(task.get("id", d.name))
+        fid = str(task.get("id", d.name)).zfill(3)
         for field in REQUIRED_FIELDS:
             if not task.get(field):
                 errors.append(f"[{fid}] task.yaml 缺字段: {field}")
@@ -63,13 +76,18 @@ def main() -> int:
         if not (d / "story.md").exists():
             errors.append(f"[{fid}] 缺 story.md")
 
-        # buggy.py 必须真的报错，而且报的是预期的错
-        r = run([sys.executable, str(d / "buggy.py")])
+        # 崩溃型故障：buggy.py 必须报预期的错；逻辑型故障：buggy 必须通不过测试
         expected = task.get("expected_error", "")
-        if r.returncode == 0:
-            errors.append(f"[{fid}] buggy.py 没有报错 —— 故障根本没坏")
-        elif expected and expected not in r.stderr:
-            errors.append(f"[{fid}] buggy.py 报的不是 {expected}:\n{r.stderr[:300]}")
+        if expected:
+            r = run([sys.executable, str(d / "buggy.py")])
+            if r.returncode == 0:
+                errors.append(f"[{fid}] buggy.py 没有报错 —— 故障根本没坏")
+            elif expected not in r.stderr:
+                errors.append(f"[{fid}] buggy.py 报的不是 {expected}:\n{r.stderr[:300]}")
+        else:
+            err = check_code_fails_tests(fid, d, "buggy.py")
+            if err:
+                errors.append(err)
 
         err = check_fixed_passes(fid, d)
         if err:

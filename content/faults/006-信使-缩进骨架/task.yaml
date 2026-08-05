@@ -1,0 +1,8 @@
+id: "006"
+title: "魔法信使一开口就说不出带不带伞"
+customer: 魔法信使
+law: 缩进是咒语的骨架
+law_statement: "机器说'这里该缩进却没有'的时候，看看你的 if/def 后面的代码，是不是忘了往后退一格。"
+difficulty: 1
+category: syntax
+expected_error: IndentationError

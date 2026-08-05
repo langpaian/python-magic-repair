@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}学习成果 · 魔法维修铺{% endblock %}
+{% block content %}
+<div class="outcomes-page">
+  <h1 class="page-title">我的学习成果</h1>
+  <p class="subtitle">这里是你化解过的每一单——你读懂的报错、你写下的修复。都可以下载带走。</p>
+  <div class="actions" style="margin: 18px 0;">
+    {% if records %}
+      <a class="btn btn-primary" href="/outcomes/download">📥 下载全部学习档案</a>
+    {% endif %}
+    <a class="btn btn-ghost" href="/">回大厅</a>
+  </div>
+
+  {% if records %}
+    <div class="law-grid">
+      {% for rec in records %}
+        <div class="outcome-card">
+          <div class="law-head">
+            <span class="law-name">{{ rec.law_name }}</span>
+            <span class="law-stage">{{ rec.date }}</span>
+          </div>
+          <div class="outcome-title">{{ rec.fault.title }}</div>
+          <p class="outcome-err">报错：<span class="err-text">{{ rec.error_headline }}</span></p>
+          <div class="actions">
+            <a class="btn btn-ghost" href="/outcomes/{{ rec.fid }}/download">📄 下载本次成果</a>
+            <a class="btn btn-ghost" href="/ticket/{{ rec.fid }}">重修</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="act">
+      <p class="spirit-talk">你还没化解任何故障。先去修一单——你的学习成果会在这里等你。</p>
+      <a class="btn btn-primary" href="/initiation">推门进去</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

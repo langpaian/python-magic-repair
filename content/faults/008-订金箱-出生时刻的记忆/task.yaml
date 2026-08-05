@@ -1,0 +1,7 @@
+id: "008"
+title: "订金箱把客人的东西串到一起了"
+customer: 占卜屋老板娘
+law: 记忆只存在于诞生的那一刻
+law_statement: "它没报错，但答案不对劲——看看函数的默认参数：那个 [] 是不是被所有客人共用了？"
+difficulty: 3
+category: functions

@@ -1,0 +1,8 @@
+id: "004"
+title: "占卜屋的账单一开口就哑了"
+customer: 占卜屋老板娘
+law: 万物分门别类
+law_statement: "机器说'这两种东西不能相加'的时候，看看是不是数字和文字混在一起了。"
+difficulty: 1
+category: types
+expected_error: TypeError

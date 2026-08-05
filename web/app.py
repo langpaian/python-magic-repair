@@ -13,7 +13,8 @@ from fastapi.templating import Jinja2Templates
 from engine import lore, runtime
 from engine.catalog import load_ending, load_faults, load_initiation, laws_by_name
 from engine.judge import run_hidden_tests
-from engine.store import is_solved, mark_solved, solved_list
+from engine.outcomes import error_headline, outcome_card_html, portfolio_html
+from engine.store import is_solved, mark_solved, solved_list, solved_records, solution_for
 
 WEB_DIR = pathlib.Path(__file__).resolve().parent
 
@@ -109,7 +110,7 @@ def ticket_submit(fid: str, code: str = Form("")):
         return JSONResponse({"ok": False, "stderr": "没有这个任务单。"})
     result = run_hidden_tests(code, fault.dir)
     if result["ok"]:
-        mark_solved(fid)
+        mark_solved(fid, code)  # 记下学习者自己的修复，供学习成果使用
         law = LAWS.get(fault.law_name, {})
         return JSONResponse(
             {
@@ -153,6 +154,48 @@ def certificate():
     solved = set(solved_list())
     laws = [f.law_name for f in FAULTS if f.id in solved]
     return Response(content=lore.certificate_svg(laws), media_type="image/svg+xml")
+
+
+@app.get("/outcomes", response_class=HTMLResponse)
+def outcomes(request: Request):
+    records = []
+    for fid, _solution, solved_at in solved_records():
+        f = _fault(fid)
+        if not f:
+            continue
+        records.append(
+            {
+                "fid": fid,
+                "fault": f,
+                "law_name": f.law_name,
+                "date": str(solved_at)[:10],
+                "error_headline": error_headline(f.buggy_code),
+            }
+        )
+    return templates.TemplateResponse(request, "outcomes.html", {"records": records})
+
+
+@app.get("/outcomes/{fid}/download", response_class=Response)
+def outcome_download(fid: str):
+    fault = _fault(fid)
+    if fault is None or not is_solved(fid):
+        return HTMLResponse("先化解这一单，才能下载学习成果。", status_code=404)
+    doc = outcome_card_html(fault, solution_for(fid), LAWS.get(fault.law_name, {}), date="")
+    return Response(
+        doc,
+        media_type="text/html",
+        headers={"Content-Disposition": f'attachment; filename="magic-repair-outcome-{fid}.html"'},
+    )
+
+
+@app.get("/outcomes/download", response_class=Response)
+def outcomes_download():
+    doc = portfolio_html(FAULTS, solved_records(), LAWS, all_done=_all_solved())
+    return Response(
+        doc,
+        media_type="text/html",
+        headers={"Content-Disposition": 'attachment; filename="my-magic-repair-learning-portfolio.html"'},
+    )
 
 
 @app.get("/lore", response_class=HTMLResponse)

@@ -1,0 +1,8 @@
+id: "009"
+title: "占卜屋的计数器一碰就断"
+customer: 占卜屋老板娘
+law: 墙的法则
+law_statement: "机器说'这个变量在赋值前就被用了'的时候，想想：函数里那个名字，是不是撞上了墙外的同名变量？"
+difficulty: 2
+category: scope
+expected_error: UnboundLocalError

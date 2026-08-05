@@ -41,7 +41,8 @@
     <div id="unlock-story" class="story"></div>
     <p id="unlock-note" class="adult-note"></p>
     <div class="unlock-actions">
-      <a class="btn btn-primary" href="/lore">回大厅 · 看法则图鉴</a>
+      <a class="btn btn-primary" href="/outcomes/{{ fault.id }}/download">📄 下载本次学习成果</a>
+      <a class="btn btn-ghost" href="/lore">法则图鉴</a>
       {% if next_fault %}
         <a class="btn btn-ghost" href="/ticket/{{ next_fault.id }}">下一单 →</a>
       {% elif others_solved %}

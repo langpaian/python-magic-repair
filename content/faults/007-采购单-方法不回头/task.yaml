@@ -1,0 +1,8 @@
+id: "007"
+title: "学徒的采购单把东西买丢了"
+customer: 魔法学徒小奇
+law: 方法不是咒语本身
+law_statement: "机器说'None 上没有位置'的时候，想想：你那个变量，是不是被一个'不返回东西'的方法赋值了？"
+difficulty: 2
+category: methods
+expected_error: TypeError

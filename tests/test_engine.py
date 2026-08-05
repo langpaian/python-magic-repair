@@ -25,8 +25,8 @@ def test_cast_timeout():
 
 
 def test_content_loads():
-    assert len(load_faults()) == 3
-    assert len(load_laws()) == 3
+    assert len(load_faults()) == 10
+    assert len(load_laws()) == 10
     assert len(load_initiation()["acts"]) == 3
 
 
@@ -37,6 +37,21 @@ def test_judge_rejects_buggy_accepts_fixed():
         good = run_hidden_tests(f.dir.joinpath("fixed.py").read_text(encoding="utf-8"), f.dir)
         assert not bad["ok"], f"{f.id} 的 buggy.py 不应通过隐藏测试"
         assert good["ok"], f"{f.id} 的 fixed.py 应通过隐藏测试"
+
+
+def test_outcome_card_renders():
+    from engine.outcomes import outcome_card_html
+
+    f = load_faults()[0]
+    card = outcome_card_html(
+        f,
+        "print('修好了')",
+        {"name": "零的禁忌", "statement": "除法不接受零的拜访", "adult_note": "ZeroDivisionError 从不说谎"},
+        date="2026-08-05",
+    )
+    assert "你读懂的报错" in card
+    assert "零的禁忌" in card
+    assert "修好了" in card  # 学习者自己的修复会被写进成果卡
 
 
 def test_ending_loads_and_certificate_renders():
