@@ -74,6 +74,13 @@
 const code = () => document.getElementById('code').value;
 const FIXED = {{ fault.fixed_code | tojson }};
 
+// 浏览器本机时间（避免 UTC 时区差）
+function localStamp() {
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, '0');
+  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+
 function revealAnswer() {
   if (!confirm('参考答案会直接揭开谜底——确定现在就要看吗？\n\n（提示：就算看了答案，你之前读报错的过程也已经是你最大的收获了。）')) return;
   const a = document.getElementById('answer');
@@ -94,7 +101,7 @@ async function submitFix() {
   const res = await fetch('/ticket/{{ fault.id }}/submit', {
     method: 'POST',
     headers: {'Content-Type':'application/x-www-form-urlencoded'},
-    body: new URLSearchParams({code: code()}),
+    body: new URLSearchParams({code: code(), solved_at: localStamp()}),
   });
   const data = await res.json();
   if (data.ok) {

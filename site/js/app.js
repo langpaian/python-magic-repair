@@ -78,6 +78,18 @@ const App = (() => {
     return String(story).split("\n\n").map((p) => "<p>" + mdBold(p) + "</p>").join("");
   }
 
+  // 浏览器本机时间（避免 UTC 时区差 8 小时）
+  function localStamp() {
+    const d = new Date();
+    const p = (n) => String(n).padStart(2, "0");
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+  }
+  function localDate() {
+    const d = new Date();
+    const p = (n) => String(n).padStart(2, "0");
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+
   function ready() {
     if (content) return Promise.resolve(content);
     if (loading) return loading;
@@ -93,7 +105,7 @@ const App = (() => {
   function isSolved(id) { return !!progress()[id]; }
   function markSolved(id, solution) {
     const p = progress();
-    p[id] = { solution, date: new Date().toISOString().slice(0, 16).replace("T", " ") };
+    p[id] = { solution, date: localStamp() };  // 浏览器本机时间
     saveProgress(p);
   }
   function solutionFor(id) { const p = progress(); return p[id] ? p[id].solution : ""; }
@@ -101,7 +113,7 @@ const App = (() => {
 
   // ---- SVG 徽章 / 证书（移植自 engine/lore.py）----
   function badgeSVG(lawName, date) {
-    const d = date || new Date().toISOString().slice(0, 10);
+    const d = date || localDate();
     const name = esc(lawName);
     return '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="360" viewBox="0 0 300 360">'
       + '<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1030"/><stop offset="100%" stop-color="#0d0a1f"/></linearGradient>'
@@ -114,7 +126,7 @@ const App = (() => {
   }
 
   function certSVG(lawNames, date) {
-    const d = date || new Date().toISOString().slice(0, 10);
+    const d = date || localDate();
     const laws = esc((lawNames || []).join(" · ") || "（法则待填）");
     return '<svg xmlns="http://www.w3.org/2000/svg" width="620" height="440" viewBox="0 0 620 440">'
       + '<defs><linearGradient id="cbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1c1436"/><stop offset="100%" stop-color="#0e0a22"/></linearGradient>'

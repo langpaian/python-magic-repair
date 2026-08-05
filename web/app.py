@@ -14,7 +14,7 @@ from engine import lore, runtime
 from engine.catalog import load_ending, load_faults, load_glossary, load_initiation, laws_by_name
 from engine.judge import run_hidden_tests
 from engine.outcomes import error_headline, outcome_card_html, portfolio_html
-from engine.store import is_solved, mark_solved, solved_list, solved_records, solution_for
+from engine.store import is_solved, mark_solved, solved_at_for, solved_list, solved_records, solution_for
 
 WEB_DIR = pathlib.Path(__file__).resolve().parent
 
@@ -125,13 +125,13 @@ def ticket_run(fid: str, code: str = Form("")):
 
 
 @app.post("/ticket/{fid}/submit")
-def ticket_submit(fid: str, code: str = Form("")):
+def ticket_submit(fid: str, code: str = Form(""), solved_at: str = Form("")):
     fault = _fault(fid)
     if fault is None:
         return JSONResponse({"ok": False, "stderr": "没有这个任务单。"})
     result = run_hidden_tests(code, fault.dir)
     if result["ok"]:
-        mark_solved(fid, code)  # 记下学习者自己的修复，供学习成果使用
+        mark_solved(fid, code, solved_at)  # 记下学习者的修复与浏览器本机时间
         law = LAWS.get(fault.law_name, {})
         return JSONResponse(
             {
@@ -189,7 +189,7 @@ def outcomes(request: Request):
                 "fid": fid,
                 "fault": f,
                 "law_name": f.law_name,
-                "date": str(solved_at)[:10],
+                "date": str(solved_at),
                 "error_headline": error_headline(f.buggy_code),
             }
         )
@@ -201,7 +201,7 @@ def outcome_download(fid: str):
     fault = _fault(fid)
     if fault is None or not is_solved(fid):
         return HTMLResponse("先化解这一单，才能下载学习成果。", status_code=404)
-    doc = outcome_card_html(fault, solution_for(fid), LAWS.get(fault.law_name, {}), date="")
+    doc = outcome_card_html(fault, solution_for(fid), LAWS.get(fault.law_name, {}), date=str(solved_at_for(fid)))
     return Response(
         doc,
         media_type="text/html",

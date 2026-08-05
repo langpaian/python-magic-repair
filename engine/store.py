@@ -23,13 +23,21 @@ def _conn() -> sqlite3.Connection:
     return conn
 
 
-def mark_solved(fault_id: str, solution: str = "") -> None:
+def mark_solved(fault_id: str, solution: str = "", solved_at: str = "") -> None:
+    """记录化解。solved_at 由浏览器本机时间提供，避免 UTC 时区差。"""
     with closing(_conn()) as c:
-        c.execute(
-            "INSERT INTO solved (fault_id, solution) VALUES (?, ?) "
-            "ON CONFLICT(fault_id) DO UPDATE SET solution=excluded.solution",
-            (fault_id, solution),
-        )
+        if solved_at:
+            c.execute(
+                "INSERT INTO solved (fault_id, solution, solved_at) VALUES (?, ?, ?) "
+                "ON CONFLICT(fault_id) DO UPDATE SET solution=excluded.solution, solved_at=excluded.solved_at",
+                (fault_id, solution, solved_at),
+            )
+        else:
+            c.execute(
+                "INSERT INTO solved (fault_id, solution) VALUES (?, ?) "
+                "ON CONFLICT(fault_id) DO UPDATE SET solution=excluded.solution",
+                (fault_id, solution),
+            )
         c.commit()
 
 
@@ -52,4 +60,10 @@ def is_solved(fault_id: str) -> bool:
 def solution_for(fault_id: str) -> str:
     with closing(_conn()) as c:
         row = c.execute("SELECT solution FROM solved WHERE fault_id=?", (fault_id,)).fetchone()
+        return row[0] if row else ""
+
+
+def solved_at_for(fault_id: str) -> str:
+    with closing(_conn()) as c:
+        row = c.execute("SELECT solved_at FROM solved WHERE fault_id=?", (fault_id,)).fetchone()
         return row[0] if row else ""
