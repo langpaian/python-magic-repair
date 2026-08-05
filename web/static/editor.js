@@ -1,4 +1,5 @@
-// 编辑器小工具：让 textarea 支持 Tab 缩进 / Shift+Tab 反缩进 / 多行选区整体缩进
+// 编辑器小工具：让所有 textarea 支持 Tab 缩进 / Shift+Tab 反缩进 / 多行选区整体缩进
+// 用事件委托：无论 textarea 是静态渲染还是动态生成，都能生效。
 (function () {
   const TAB = "    "; // 4 个空格（Python 社区习惯）
 
@@ -31,14 +32,11 @@
     }
   }
 
-  function enableTabIndent(textarea) {
-    textarea.addEventListener("keydown", function (e) {
-      if (e.key === "Tab") {
-        e.preventDefault();
-        indentSelection(this, e.shiftKey ? -1 : 1);
-      }
-    });
-  }
-
-  document.querySelectorAll("textarea").forEach(enableTabIndent);
+  // 事件委托：Tab 按下时，若目标是一个 textarea，就接管缩进
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Tab" && e.target && e.target.tagName === "TEXTAREA") {
+      e.preventDefault();
+      indentSelection(e.target, e.shiftKey ? -1 : 1);
+    }
+  });
 })();
