@@ -12,7 +12,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from engine.catalog import load_ending, load_faults, load_initiation, load_laws  # noqa: E402
+from engine.catalog import load_ending, load_faults, load_glossary, load_initiation, load_laws  # noqa: E402
 from engine.outcomes import error_headline  # noqa: E402
 
 SITE = ROOT / "site"
@@ -43,6 +43,7 @@ def main() -> None:
         "laws": {law["name"]: law for law in load_laws()},
         "initiation": load_initiation(),
         "ending": load_ending(),
+        "glossary": load_glossary(),
     }
 
     (SITE / "data").mkdir(parents=True, exist_ok=True)

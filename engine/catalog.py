@@ -51,3 +51,7 @@ def load_initiation() -> dict:
 
 def load_ending() -> dict:
     return yaml.safe_load((CONTENT / "awakening.yaml").read_text(encoding="utf-8"))
+
+
+def load_glossary() -> list[dict]:
+    return yaml.safe_load((CONTENT / "glossary.yaml").read_text(encoding="utf-8"))["glossary"]

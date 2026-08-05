@@ -14,6 +14,18 @@
     {% endif %}
   </div>
 
+  {% if glossary %}
+  <details class="glossary">
+    <summary>📖 咒语里有你眼生的词（{{ glossary|length }}）</summary>
+    {% for g in glossary %}
+      <div class="code-note">
+        <code class="note-name">{{ g.name }}</code>
+        <p class="note-explain">{{ g.explanation }}</p>
+      </div>
+    {% endfor %}
+  </details>
+  {% endif %}
+
   <div class="workshop">
     <div class="editor-pane">
       <div class="pane-title">咒语原文<span class="hint-line">（改这里）</span></div>

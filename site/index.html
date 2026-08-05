@@ -26,10 +26,12 @@
 <script>
 App.ready().then((C) => {
   const esc = App.esc;
+  // 按难度(再按id)排：新手先面对最容易的单
+  const sorted = C.faults.slice().sort((a, b) => (a.difficulty - b.difficulty) || (a.id < b.id ? -1 : 1));
   const solved = App.solvedList();
   const total = C.faults.length;
   const solvedCount = solved.length;
-  const next = C.faults.find((f) => !App.isSolved(f.id));
+  const next = sorted.find((f) => !App.isSolved(f.id));
   const allDone = solvedCount === total && total > 0;
 
   const door = next
@@ -38,7 +40,7 @@ App.ready().then((C) => {
       ? '<a class="btn btn-primary" href="initiation.html">推门进去 · 启蒙仪式</a>'
       : '<a class="btn btn-primary" href="awakening.html">觉醒 · 领取维修师之证</a>';
 
-  const cards = C.faults.map((f) => {
+  const cards = sorted.map((f) => {
     const done = App.isSolved(f.id);
     return '<a class="ticket-card ' + (done ? 'ticket-done' : '') + '" href="ticket.html?fault=' + f.id + '">'
       + '<div class="ticket-top"><span class="customer">👤 ' + esc(f.customer) + '</span><span class="diff">' + "★".repeat(f.difficulty) + '</span></div>'

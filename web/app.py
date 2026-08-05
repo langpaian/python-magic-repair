@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from engine import lore, runtime
-from engine.catalog import load_ending, load_faults, load_initiation, laws_by_name
+from engine.catalog import load_ending, load_faults, load_glossary, load_initiation, laws_by_name
 from engine.judge import run_hidden_tests
 from engine.outcomes import error_headline, outcome_card_html, portfolio_html
 from engine.store import is_solved, mark_solved, solved_list, solved_records, solution_for
@@ -26,6 +26,7 @@ FAULTS = load_faults()
 LAWS = laws_by_name()
 INIT = load_initiation()
 ENDING = load_ending()
+GLOSSARY = load_glossary()
 
 
 @app.middleware("http")
@@ -45,9 +46,14 @@ def _fault(fid: str):
     return None
 
 
+def _sorted_faults() -> list:
+    """按难度（再按 id）排：新手先面对最容易的单。"""
+    return sorted(FAULTS, key=lambda f: (f.difficulty, f.id))
+
+
 def _next_unsolved(exclude: str | None = None):
     solved = solved_list()
-    for f in FAULTS:
+    for f in _sorted_faults():
         if f.id not in solved and f.id != exclude:
             return f
     return None
@@ -66,7 +72,7 @@ def hall(request: Request):
         request,
         "hall.html",
         {
-            "faults": FAULTS,
+            "faults": _sorted_faults(),
             "solved": solved,
             "solved_count": len(solved),
             "total_count": len(FAULTS),
@@ -98,6 +104,7 @@ def ticket(request: Request, fid: str):
     law = LAWS.get(fault.law_name, {})
     solved_set = set(solved_list())
     others_solved = all(f.id in solved_set for f in FAULTS if f.id != fid)
+    glossary = [g for g in GLOSSARY if g["pattern"] in fault.buggy_code]
     return templates.TemplateResponse(
         request,
         "ticket.html",
@@ -107,6 +114,7 @@ def ticket(request: Request, fid: str):
             "already_solved": is_solved(fid),
             "next_fault": _next_unsolved(exclude=fid),
             "others_solved": others_solved,
+            "glossary": glossary,
         },
     )
 

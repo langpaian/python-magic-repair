@@ -3,6 +3,6 @@ title: "学徒的记账本一算总账就迷路"
 customer: 魔法学徒小奇
 law: 房间号必须存在
 law_statement: "机器说'没有这一间'的时候，别慌。先数一数：你让它数到了第几间？账本里到底有几间？"
-difficulty: 1
+difficulty: 2
 category: sequence
 expected_error: IndexError

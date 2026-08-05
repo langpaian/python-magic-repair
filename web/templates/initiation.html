@@ -28,6 +28,18 @@
     <div id="act2-both" class="spirit" hidden></div>
   </section>
 
+  <section class="act" id="primer" hidden>
+    <h2>{{ init.primer.title }}</h2>
+    <p class="spirit-talk">{{ init.primer.intro }}</p>
+    {% for item in init.primer.entries %}
+      <div class="code-note">
+        <pre class="note-code">{{ item.code }}</pre>
+        <p class="note-explain">{{ item.explain }}</p>
+      </div>
+    {% endfor %}
+    <p class="spirit-talk">{{ init.primer.closing }}</p>
+  </section>
+
   <section class="act" id="act3" hidden>
     <h2>{{ init.acts[2].title }}</h2>
     <p class="spirit-talk">{{ init.acts[2].spirit_intro }}</p>
@@ -83,8 +95,9 @@ async function castAct2(i) {
   if (doneExp.size >= 2) {
     document.getElementById('act2-both').hidden = false;
     document.getElementById('act2-both').textContent = '老精灵：\n' + bothAfter;
+    document.getElementById('primer').hidden = false;
     document.getElementById('act3').hidden = false;
-    document.getElementById('act3').scrollIntoView({behavior:'smooth'});
+    document.getElementById('primer').scrollIntoView({behavior:'smooth'});
   }
 }
 </script>

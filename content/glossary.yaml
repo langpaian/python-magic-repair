@@ -1,0 +1,42 @@
+# 咒语小词典：任务卡里陌生代码结构的解释（内容 = 数据）
+# 只要咒语原文里出现了对应 pattern，就会在任务卡上显示这条解释。
+glossary:
+  - key: def
+    pattern: "def "
+    name: "def"
+    explanation: "这是在'定义一道咒语'：给一段本领起个名字，以后随时可以喊它。冒号后面缩进的那些行，就是这道咒语真正要做的事。"
+
+  - key: main
+    pattern: '__name__ == "__main__"'
+    name: 'if __name__ == "__main__":'
+    explanation: "这是咒语的'开场白'：只有当这个文件被直接运行时才从这里开始念；如果它只是被别的咒语借去用，就不念这一段。修 Bug 时一般不用动它。"
+
+  - key: return
+    pattern: "return "
+    name: "return"
+    explanation: "把算好的结果'交回去'，交给喊这道咒语的人。它后面那一行，就是答案。"
+
+  - key: import
+    pattern: "import "
+    name: "import"
+    explanation: "借用别人写好的咒语书（库）里的现成本领，省得自己从头写。"
+
+  - key: global
+    pattern: "global "
+    name: "global"
+    explanation: "隔着墙对墙外的变量喊话，让它进到函数里来。没有这句，函数里的同名变量就是另一个人。"
+
+  - key: eq
+    pattern: "=="
+    name: "=="
+    explanation: "比较两边的'值'相不相同。注意和 is 区分：is 问的是'是不是同一个东西'。"
+
+  - key: append
+    pattern: ".append("
+    name: ".append()"
+    explanation: "往列表的末尾加进一样东西。注意：它改完就返回 None，不会把新列表还给你。"
+
+  - key: get
+    pattern: ".get("
+    name: ".get()"
+    explanation: "从字典里取东西；没有这把钥匙时，返回你给的后备值，而不是当场报错。"

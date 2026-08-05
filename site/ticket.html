@@ -50,6 +50,8 @@ App.ready().then((C) => {
   const othersSolved = C.faults.every((f) => f.id === fault.id || App.isSolved(f.id));
   const nextFault = C.faults.find((f) => f.id !== fault.id && !App.isSolved(f.id));
 
+  const glossary = (C.glossary || []).filter((g) => fault.buggy_code.includes(g.pattern));
+
   document.getElementById("app").innerHTML =
     '<div class="ticket-page">'
     + '<div class="task-card">'
@@ -58,6 +60,11 @@ App.ready().then((C) => {
     + '<p class="symptom">' + esc(fault.law_statement) + "</p>"
     + (solved ? '<p class="solved-note">✓ 你已化解此单，法则「' + esc(fault.law) + '」已收进图鉴。可以再修一次练练手。</p>' : "")
     + "</div>"
+    + (glossary.length
+      ? '<details class="glossary"><summary>📖 咒语里有你眼生的词（' + glossary.length + '）</summary>'
+        + glossary.map((g) => '<div class="code-note"><code class="note-name">' + esc(g.name) + '</code><p class="note-explain">' + esc(g.explanation) + '</p></div>').join("")
+        + "</details>"
+      : "")
     + '<div class="workshop">'
     + '<div class="editor-pane">'
     + '<div class="pane-title">咒语原文<span class="hint-line">（改这里 · Tab 缩进）</span></div>'

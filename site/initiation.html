@@ -54,6 +54,12 @@ App.ready().then((C) => {
     + '<div id="act2-after" hidden></div>'
     + '<div id="act2-both" hidden></div>'
     + "</section>"
+    + '<section class="act" id="primer" hidden>'
+    + "<h2>" + esc(C.initiation.primer.title) + "</h2>"
+    + '<p class="spirit-talk">' + esc(C.initiation.primer.intro) + "</p>"
+    + C.initiation.primer.entries.map((item) => '<div class="code-note"><pre class="note-code">' + esc(item.code) + '</pre><p class="note-explain">' + esc(item.explain) + '</p></div>').join("")
+    + '<p class="spirit-talk">' + esc(C.initiation.primer.closing) + "</p>"
+    + "</section>"
     + '<section class="act" id="act3" hidden>'
     + "<h2>" + esc(A[2].title) + "</h2>"
     + '<p class="spirit-talk">' + esc(A[2].spirit_intro) + "</p>"
@@ -95,8 +101,9 @@ App.ready().then((C) => {
     if (doneExp.size >= 2) {
       document.getElementById("act2-both").hidden = false;
       document.getElementById("act2-both").innerHTML = spirit(A[1].spirit_after_both);
+      document.getElementById("primer").hidden = false;
       document.getElementById("act3").hidden = false;
-      document.getElementById("act3").scrollIntoView({ behavior: "smooth" });
+      document.getElementById("primer").scrollIntoView({ behavior: "smooth" });
     }
   };
 });

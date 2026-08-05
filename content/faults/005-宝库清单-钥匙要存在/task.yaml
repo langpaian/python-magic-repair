@@ -3,6 +3,6 @@ title: "宝库清单一问到没有的东西就爆炸"
 customer: 宝库管理员
 law: 钥匙要存在
 law_statement: "机器说'没有这把钥匙'的时候，检查一下：那个东西真的在清单里吗？没有的话，给它一个后备答案。"
-difficulty: 1
+difficulty: 2
 category: dict
 expected_error: KeyError
