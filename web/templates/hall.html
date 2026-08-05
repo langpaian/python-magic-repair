@@ -9,15 +9,17 @@
     <span class="rep-num">{{ solved_count }} / {{ total_count }}</span>
     <span class="rep-label">条法则已化解</span>
     {% if solved_count == total_count and total_count > 0 %}
-      <div class="rep-done">你已经把这一批故障都修好了 —— 老师傅，下班吧。</div>
+      <div class="rep-done">你把这批故障都修好了——机器说的每一句真话，你都听懂了。</div>
     {% endif %}
   </div>
 
   <div class="door-row">
-    {% if solved_count == 0 %}
+    {% if next_fid %}
+      <a class="btn btn-primary" href="/ticket/{{ next_fid }}">继续修单</a>
+    {% elif solved_count == 0 %}
       <a class="btn btn-primary" href="/initiation">推门进去 · 启蒙仪式</a>
     {% else %}
-      <a class="btn btn-primary" href="/ticket/{{ next_fid }}">继续修单</a>
+      <a class="btn btn-primary" href="/initiation">下一批故障正在路上 · 先重温启蒙</a>
     {% endif %}
     <a class="btn btn-ghost" href="/lore">法则图鉴</a>
   </div>

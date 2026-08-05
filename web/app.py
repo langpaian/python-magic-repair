@@ -70,7 +70,12 @@ def cast(code: str = Form("")):
 def ticket(request: Request, fid: str):
     fault = _fault(fid)
     if fault is None:
-        return HTMLResponse("没有这个任务单。", status_code=404)
+        return HTMLResponse(
+            '<div style="padding:60px;text-align:center;font-family:sans-serif;color:#a79fc8">'
+            "<p>这个任务单不存在——它可能还没被写进 <code>content/</code> 目录。</p>"
+            '<p><a href="/">← 回大厅</a></p></div>',
+            status_code=404,
+        )
     law = LAWS.get(fault.law_name, {})
     return templates.TemplateResponse(
         request,
