@@ -46,8 +46,24 @@ App.ready().then((C) => {
     return lines.map((l, i) => (i === last ? '<span class="err-key">' + escH(l) + "</span>" : escH(l))).join("\n");
   }
 
+  // —— 施法动画（和任务卡一致：悬浮法阵 + 成功金爆/失败红震） ——
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  function spellStart() {
+    const o = document.getElementById("spell-overlay");
+    o.className = "spell-overlay magic-m1 attr-spirit";
+    o.querySelector(".spell-label").textContent = "施放初级魔法…";
+    o.hidden = false;
+  }
+  function spellResolve(ok) {
+    const o = document.getElementById("spell-overlay");
+    o.classList.add(ok ? "spell-success" : "spell-fail");
+    o.querySelector(".spell-label").textContent = ok ? "成功" : "失败";
+    setTimeout(() => { o.hidden = true; o.classList.remove("spell-success", "spell-fail"); }, 750);
+  }
+
   document.getElementById("app").innerHTML =
-    '<h1 class="page-title">' + esc(C.initiation.title) + "</h1>"
+    '<div class="initiation-page">'
+    + '<h1 class="page-title">' + esc(C.initiation.title) + "</h1>"
     + '<section class="act" id="act1">'
     + "<h2>" + esc(A[0].title) + "</h2>"
     + '<p class="spirit-talk">' + esc(A[0].spirit_intro) + "</p>"
@@ -82,7 +98,14 @@ App.ready().then((C) => {
     + "<h2>" + esc(A[2].title) + "</h2>"
     + '<p class="spirit-talk">' + esc(A[2].spirit_intro) + "</p>"
     + '<a class="btn btn-primary" href="ticket.html?fault=' + A[2].next_ticket + '">🔧 接下第一单</a>'
-    + "</section>";
+    + "</section>"
+    + '<div id="spell-overlay" class="spell-overlay magic-m1 attr-spirit" hidden>'
+    + '<div class="spell-float">'
+    + '<div class="spell-circle"><div class="spell-ring"></div><div class="spell-ring spell-ring2"></div><div class="spell-ring3"></div><div class="spell-orbit"><span class="p p1"></span><span class="p p2"></span><span class="p p3"></span></div><div class="spell-core"></div><div class="spell-burst"></div></div>'
+    + '<div class="spell-label">施放初级魔法…</div>'
+    + "</div>"
+    + "</div>"
+    + "</div>";
 
   // 预热魔法引擎
   Runner.init().then(() => {
@@ -91,11 +114,12 @@ App.ready().then((C) => {
   });
 
   window.castAct1 = async () => {
+    spellStart();
     const code = document.getElementById("act1-code").value;
+    const [r] = await Promise.all([Runner.run(code), sleep(1000)]);
+    spellResolve(r.ok);
     const c = document.getElementById("act1-console");
     c.hidden = false;
-    c.textContent = "（正在唤醒机器……）";
-    const r = await Runner.run(code);
     if (r.ok) {
       c.textContent = r.stdout || "（什么也没发生）";
       c.classList.remove("err"); c.classList.add("ok");
@@ -115,10 +139,11 @@ App.ready().then((C) => {
   };
 
   window.castAct2 = async (i) => {
+    spellStart();
+    const [r] = await Promise.all([Runner.run(A[1].experiments[i].code), sleep(1000)]);
+    spellResolve(r.ok);
     const c = document.getElementById("act2-console");
     c.hidden = false;
-    c.textContent = "（正在唤醒机器……）";
-    const r = await Runner.run(A[1].experiments[i].code);
     if (r.ok) {
       c.textContent = r.stdout || "";
       c.classList.remove("err"); c.classList.add("ok");

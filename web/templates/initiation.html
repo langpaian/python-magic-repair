@@ -59,6 +59,20 @@
     <p class="spirit-talk">{{ init.acts[2].spirit_intro }}</p>
     <a class="btn btn-primary" href="/ticket/{{ init.acts[2].next_ticket }}">🔧 接下第一单</a>
   </section>
+
+  <div id="spell-overlay" class="spell-overlay magic-m1 attr-spirit" hidden>
+    <div class="spell-float">
+      <div class="spell-circle">
+        <div class="spell-ring"></div>
+        <div class="spell-ring spell-ring2"></div>
+        <div class="spell-ring3"></div>
+        <div class="spell-orbit"><span class="p p1"></span><span class="p p2"></span><span class="p p3"></span></div>
+        <div class="spell-core"></div>
+        <div class="spell-burst"></div>
+      </div>
+      <div class="spell-label">施放初级魔法…</div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 {% block script %}
@@ -81,13 +95,32 @@ function renderErr(text) {
   return lines.map((l, i) => (i === last ? '<span class="err-key">' + escH(l) + '</span>' : escH(l))).join('\n');
 }
 
+// —— 施法动画（和任务卡一致：悬浮法阵 + 成功金爆/失败红震） ——
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+function spellStart() {
+  const o = document.getElementById('spell-overlay');
+  o.className = 'spell-overlay magic-m1 attr-spirit';
+  o.querySelector('.spell-label').textContent = '施放初级魔法…';
+  o.hidden = false;
+}
+function spellResolve(ok) {
+  const o = document.getElementById('spell-overlay');
+  o.classList.add(ok ? 'spell-success' : 'spell-fail');
+  o.querySelector('.spell-label').textContent = ok ? '成功' : '失败';
+  setTimeout(() => { o.hidden = true; o.classList.remove('spell-success', 'spell-fail'); }, 750);
+}
+
 async function castAct1() {
-  const res = await fetch('/cast', {
-    method: 'POST',
-    headers: {'Content-Type':'application/x-www-form-urlencoded'},
-    body: new URLSearchParams({code: document.getElementById('act1-code').value}),
-  });
-  const data = await res.json();
+  spellStart();
+  const [data] = await Promise.all([
+    fetch('/cast', {
+      method: 'POST',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({code: document.getElementById('act1-code').value}),
+    }).then((r) => r.json()),
+    sleep(1000),
+  ]);
+  spellResolve(data.ok);
   const c = document.getElementById('act1-console');
   c.hidden = false;
   if (data.ok) {
@@ -110,12 +143,16 @@ async function castAct1() {
 }
 
 async function castAct2(i) {
-  const res = await fetch('/cast', {
-    method: 'POST',
-    headers: {'Content-Type':'application/x-www-form-urlencoded'},
-    body: new URLSearchParams({code: expCodes[i]}),
-  });
-  const data = await res.json();
+  spellStart();
+  const [data] = await Promise.all([
+    fetch('/cast', {
+      method: 'POST',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({code: expCodes[i]}),
+    }).then((r) => r.json()),
+    sleep(1000),
+  ]);
+  spellResolve(data.ok);
   const c = document.getElementById('act2-console');
   c.hidden = false;
   if (data.ok) {

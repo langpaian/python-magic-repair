@@ -348,6 +348,7 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
 .unlock-actions { display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
 
 /* 启蒙仪式 */
+.initiation-page { position: relative; }
 .initiation-page .act {
   background: var(--paper-card); border: 1px solid var(--line); border-radius: 16px;
   padding: 22px; margin-bottom: 18px; box-shadow: 0 1px 4px rgba(164, 118, 63, .08);
