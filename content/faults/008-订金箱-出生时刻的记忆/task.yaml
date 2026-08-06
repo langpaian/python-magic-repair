@@ -1,7 +1,11 @@
-id: "008"
-title: "订金箱把客人的东西串到一起了"
+id: 008
+title: 订金箱把客人的东西串到一起了
 customer: 占卜屋老板娘
 law: 记忆只存在于诞生的那一刻
-law_statement: "它没报错，但答案不对劲——看看函数的默认参数：那个 [] 是不是被所有客人共用了？"
+law_statement: 它没报错，但答案不对劲——看看函数的默认参数：那个 [] 是不是被所有客人共用了？
 difficulty: 4
 category: functions
+learn:
+  topic: 函数 · 默认参数
+  url: https://www.runoob.com/python3/python3-function.html
+  note: 默认值 [] 只在函数定义时创建一次，之后每次调用都共用它。标准解法：默认值用 None，函数里再新建。

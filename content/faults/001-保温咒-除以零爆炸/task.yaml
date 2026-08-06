@@ -1,8 +1,12 @@
-id: "001"
-title: "客人的保温咒一除以零就爆炸"
+id: '001'
+title: 客人的保温咒一除以零就爆炸
 customer: 卖魔药的老妇人
 law: 零的禁忌
-law_statement: "先别急着改。在它报错的地方停一下：机器说它做不到什么？它为什么做不到？"
+law_statement: 先别急着改。在它报错的地方停一下：机器说它做不到什么？它为什么做不到？
 difficulty: 1
 category: arithmetic
 expected_error: ZeroDivisionError
+learn:
+  topic: 运算符 · 除法
+  url: https://www.runoob.com/python3/python3-operators.html
+  note: 除法 / 不能除以 0。补一个判断：room_temp 为 0 时给出'算不了'，而不是让机器爆炸。

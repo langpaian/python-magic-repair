@@ -1,8 +1,12 @@
-id: "009"
-title: "占卜屋的计数器一碰就断"
+id: 009
+title: 占卜屋的计数器一碰就断
 customer: 占卜屋老板娘
 law: 墙的法则
-law_statement: "机器说'这个变量在赋值前就被用了'的时候，想想：函数里那个名字，是不是撞上了墙外的同名变量？"
+law_statement: 机器说'这个变量在赋值前就被用了'的时候，想想：函数里那个名字，是不是撞上了墙外的同名变量？
 difficulty: 3
 category: scope
 expected_error: UnboundLocalError
+learn:
+  topic: 函数 · 作用域
+  url: https://www.runoob.com/python3/python3-function.html
+  note: 函数里给变量赋值，它就成了'墙内'局部变量。要改墙外的全局变量，需要 global 声明。

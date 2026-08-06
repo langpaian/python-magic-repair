@@ -29,6 +29,8 @@ def main() -> None:
                 "law": f.law_name,
                 "law_statement": f.law_statement,
                 "difficulty": f.difficulty,
+                "level": f.level,
+                "learn": f.learn,
                 "category": f.task.get("category", ""),
                 "buggy_code": f.buggy_code,
                 "fixed_code": f.fixed_code,

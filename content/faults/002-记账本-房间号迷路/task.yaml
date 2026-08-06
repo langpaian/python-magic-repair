@@ -1,8 +1,12 @@
-id: "002"
-title: "学徒的记账本一算总账就迷路"
+id: '002'
+title: 学徒的记账本一算总账就迷路
 customer: 魔法学徒小奇
 law: 房间号必须存在
-law_statement: "机器说'没有这一间'的时候，别慌。先数一数：你让它数到了第几间？账本里到底有几间？"
+law_statement: 机器说'没有这一间'的时候，别慌。先数一数：你让它数到了第几间？账本里到底有几间？
 difficulty: 2
 category: sequence
 expected_error: IndexError
+learn:
+  topic: 列表与索引
+  url: https://www.runoob.com/python3/python3-list.html
+  note: len(列表) 是元素个数，索引从 0 开始、到 len-1。range(len(列表)) 正好数到最后一位；多加一个 +1 就数到不存在的房间了。

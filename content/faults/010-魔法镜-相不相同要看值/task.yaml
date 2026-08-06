@@ -1,7 +1,11 @@
-id: "010"
-title: "魔法镜认不出长得一样的钥匙"
+id: '010'
+title: 魔法镜认不出长得一样的钥匙
 customer: 占卜屋老板娘
 law: 相不相同要看值
-law_statement: "它没报错，但答案错了——看看你是不是用了 is 来比较值？机器的'是不是同一个'和'值相不相同'是两件事。"
+law_statement: 它没报错，但答案错了——看看你是不是用了 is 来比较值？机器的'是不是同一个'和'值相不相同'是两件事。
 difficulty: 3
 category: comparison
+learn:
+  topic: 比较运算符 == 与 is
+  url: https://www.runoob.com/python3/python3-operators.html
+  note: 比较内容用 ==；is 是问'是不是同一个东西'，对列表这种对象几乎总是 False。

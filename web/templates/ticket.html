@@ -5,7 +5,7 @@
   <div class="task-card">
     <div class="ticket-top">
       <span class="customer">👤 {{ fault.customer }}</span>
-      <span class="diff">{{ "★" * fault.difficulty }}</span>
+      <span class="diff"><span class="diff-level">{{ fault.level }}</span>{{ "★" * fault.difficulty }}</span>
     </div>
     <h1>{{ fault.title }}</h1>
     <p class="symptom">{{ fault.law_statement }}</p>
@@ -13,6 +13,14 @@
       <p class="solved-note">✓ 你已化解此单，法则「{{ fault.law_name }}」已收进图鉴。可以再修一次练练手。</p>
     {% endif %}
   </div>
+
+  {% if fault.learn and fault.learn.url %}
+  <div class="learn-box">
+    <div class="learn-head">📚 学一学 · {{ fault.learn.topic }}</div>
+    <p class="learn-note">{{ fault.learn.note }}</p>
+    <a class="btn btn-ghost" href="{{ fault.learn.url }}" target="_blank" rel="noopener">去菜鸟教程学这个 →</a>
+  </div>
+  {% endif %}
 
   {% if glossary %}
   <details class="glossary">

@@ -52,11 +52,14 @@ App.ready().then((C) => {
   document.getElementById("app").innerHTML =
     '<div class="ticket-page">'
     + '<div class="task-card">'
-    + '<div class="ticket-top"><span class="customer">👤 ' + esc(fault.customer) + '</span><span class="diff">' + "★".repeat(fault.difficulty) + '</span></div>'
+    + '<div class="ticket-top"><span class="customer">👤 ' + esc(fault.customer) + '</span><span class="diff"><span class="diff-level">' + esc(fault.level) + '</span>' + "★".repeat(fault.difficulty) + '</span></div>'
     + "<h1>" + esc(fault.title) + "</h1>"
     + '<p class="symptom">' + esc(fault.law_statement) + "</p>"
     + (solved ? '<p class="solved-note">✓ 你已化解此单，法则「' + esc(fault.law) + '」已收进图鉴。可以再修一次练练手。</p>' : "")
     + "</div>"
+    + (fault.learn && fault.learn.url
+      ? '<div class="learn-box"><div class="learn-head">📚 学一学 · ' + esc(fault.learn.topic) + '</div><p class="learn-note">' + esc(fault.learn.note) + '</p><a class="btn btn-ghost" href="' + esc(fault.learn.url) + '" target="_blank" rel="noopener">去菜鸟教程学这个 →</a></div>'
+      : "")
     + (glossary.length
       ? '<details class="glossary"><summary>📖 咒语里有你眼生的词（' + glossary.length + '）</summary>'
         + glossary.map((g) => '<div class="code-note"><code class="note-name">' + esc(g.name) + '</code><p class="note-explain">' + esc(g.explanation) + '</p></div>').join("")

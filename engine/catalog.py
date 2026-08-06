@@ -21,6 +21,8 @@ class Fault:
         self.law_name = task["law"]
         self.law_statement = task.get("law_statement", "")
         self.difficulty = task.get("difficulty", 1)
+        self.learn = task.get("learn", {})
+        self.level = {1: "入门", 2: "基础", 3: "进阶", 4: "挑战"}.get(int(task.get("difficulty", 2)), "进阶")
         self.buggy_code = (dir / "buggy.py").read_text(encoding="utf-8")
         self.fixed_code = (dir / "fixed.py").read_text(encoding="utf-8") if (dir / "fixed.py").exists() else ""
         self.story_text = (dir / "story.md").read_text(encoding="utf-8") if (dir / "story.md").exists() else ""

@@ -1,8 +1,12 @@
-id: "003"
-title: "占卜屋的咒语一开口就忘了词"
+id: '003'
+title: 占卜屋的咒语一开口就忘了词
 customer: 占卜屋老板娘
 law: 名字必须先被念过
-law_statement: "机器说'这个名字我没听过'的时候，去咒语里找：是不是有个名字拼错了、或者还没被定义？"
+law_statement: 机器说'这个名字我没听过'的时候，去咒语里找：是不是有个名字拼错了、或者还没被定义？
 difficulty: 1
 category: naming
 expected_error: NameError
+learn:
+  topic: 变量与赋值
+  url: https://www.runoob.com/python3/python3-variable-types.html
+  note: 用到的名字必须先被赋值（定义）。机器不猜拼写——名字写岔一个字母，它就当是另一个人。

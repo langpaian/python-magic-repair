@@ -30,7 +30,7 @@
       <a class="ticket-card {% if f.id in solved %}ticket-done{% endif %}" href="/ticket/{{ f.id }}">
         <div class="ticket-top">
           <span class="customer">👤 {{ f.customer }}</span>
-          <span class="diff">{{ "★" * f.difficulty }}</span>
+          <span class="diff"><span class="diff-level">{{ f.level }}</span>{{ "★" * f.difficulty }}</span>
         </div>
         <div class="ticket-title">{{ f.title }}</div>
         <div class="ticket-foot">

@@ -43,7 +43,7 @@ App.ready().then((C) => {
   const cards = sorted.map((f) => {
     const done = App.isSolved(f.id);
     return '<a class="ticket-card ' + (done ? 'ticket-done' : '') + '" href="ticket.html?fault=' + f.id + '">'
-      + '<div class="ticket-top"><span class="customer">👤 ' + esc(f.customer) + '</span><span class="diff">' + "★".repeat(f.difficulty) + '</span></div>'
+      + '<div class="ticket-top"><span class="customer">👤 ' + esc(f.customer) + '</span><span class="diff"><span class="diff-level">' + esc(f.level) + '</span>' + "★".repeat(f.difficulty) + '</span></div>'
       + '<div class="ticket-title">' + esc(f.title) + '</div>'
       + '<div class="ticket-foot">' + (done ? '<span class="stamp">✓ 已化解 · ' + esc(f.law) + '</span>' : '<span class="stamp stamp-todo">待化解</span>') + '</div>'
       + '</a>';
