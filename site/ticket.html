@@ -79,6 +79,7 @@ App.ready().then((C) => {
     + '<div class="console-pane">'
     + '<div class="pane-title">机器的回应 <span id="engine-state" style="color:#a79fc8;font-size:12px"></span></div>'
     + '<pre id="console" class="console">……</pre>'
+    + '<div id="read-note" class="read-note" hidden></div>'
     + '<div id="spirit" class="spirit" hidden></div>'
     + '<div id="answer" class="answer" hidden></div>'
     + "</div>"
@@ -92,14 +93,37 @@ App.ready().then((C) => {
 
   const code = () => document.getElementById("code").value;
 
+  function escH(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function renderErr(text) {
+    const lines = String(text).split("\n");
+    let last = lines.length - 1;
+    while (last >= 0 && lines[last].trim() === "") last--;
+    return lines.map((l, i) => (i === last ? '<span class="err-key">' + escH(l) + "</span>" : escH(l))).join("\n");
+  }
+  function showMachine(r, label) {
+    const c = document.getElementById("console");
+    c.className = "console";
+    const n = document.getElementById("read-note");
+    if (r.ok) {
+      c.textContent = "> " + label + "\n" + (r.stdout || "");
+      c.classList.add("ok");
+      if (n) n.hidden = true;
+    } else {
+      c.innerHTML = "> " + label + "\n" + renderErr(r.stderr || "");
+      c.classList.add("err");
+      if (n) { n.hidden = false; n.textContent = "↑ 从最后一行读起 —— 高亮那行就是机器亲口说的重点"; }
+    }
+  }
+
   window.cast = async () => {
     const c = document.getElementById("console");
     c.hidden = false;
     c.textContent = "> 施法看看\n（正在唤醒机器……）";
     c.className = "console";
     const r = await Runner.run(code());
-    c.textContent = "> 施法看看\n" + (r.stdout || "") + (r.stderr ? (r.stdout ? "\n" : "") + r.stderr : "");
-    c.classList.add(r.ok ? "ok" : "err");
+    showMachine(r, "施法看看");
   };
 
   window.submitFix = async () => {
@@ -124,8 +148,7 @@ App.ready().then((C) => {
       document.getElementById("unlock-actions").innerHTML = actions.join("");
       document.getElementById("unlock").hidden = false;
     } else {
-      c.textContent = "> 提交修复\n" + (r.stdout || "") + (r.stderr ? (r.stdout ? "\n" : "") + r.stderr : "");
-      c.classList.add("err");
+      showMachine(r, "提交修复");
     }
   };
 

@@ -41,6 +41,19 @@ acts:
       "有一位客人，她的咒语出了点小问题。去听听，机器在说什么。"
     next_ticket: 003
 
+read_error:
+  title: 报错像一封信 · 先看最后一行
+  intro: |
+    "看见这一大段字，先别慌。报错像一封信，重点只有两处——
+     我教你这个行当最值钱的小窍门。"
+  steps:
+    - label: "① 先看最后一行"
+      explain: "最后一行是机器亲口说它做不到什么——类型 + 一句话。比如 TypeError: can't multiply sequence by non-int of type 'str'，就是两种东西拼不到一起。"
+    - label: "② 再找 'line 第几行'"
+      explain: "带 line 的那一行，会指向你的代码里出问题的位置。修 Bug，就从那一行开始看。"
+  closing: |
+    "记住了：先看最后一行，再找 line 行号。以后每一单，都从这两处下手。"
+
 primer:
   title: 读咒语之前 · 两个眼生的词
   intro: |

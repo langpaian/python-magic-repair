@@ -12,6 +12,7 @@
       <button class="btn btn-primary" onclick="castAct1()">🪄 施法</button>
     </div>
     <pre id="act1-console" class="console" hidden></pre>
+    <div id="act1-note" class="read-note" hidden></div>
     <div id="act1-after" class="spirit" hidden></div>
   </section>
 
@@ -24,8 +25,21 @@
       {% endfor %}
     </div>
     <pre id="act2-console" class="console" hidden></pre>
+    <div id="act2-note" class="read-note" hidden></div>
     <div id="act2-after" class="spirit" hidden></div>
     <div id="act2-both" class="spirit" hidden></div>
+  </section>
+
+  <section class="act" id="read-error" hidden>
+    <h2>{{ init.read_error.title }}</h2>
+    <p class="spirit-talk">{{ init.read_error.intro }}</p>
+    {% for step in init.read_error.steps %}
+      <div class="code-note">
+        <code class="note-name">{{ step.label }}</code>
+        <p class="note-explain">{{ step.explain }}</p>
+      </div>
+    {% endfor %}
+    <p class="spirit-talk">{{ init.read_error.closing }}</p>
   </section>
 
   <section class="act" id="primer" hidden>
@@ -57,6 +71,16 @@ const expAfter = A[1].experiments.map(e => e.spirit_after);
 const bothAfter = A[1].spirit_after_both;
 const doneExp = new Set();
 
+function escH(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function renderErr(text) {
+  const lines = String(text).split('\n');
+  let last = lines.length - 1;
+  while (last >= 0 && lines[last].trim() === '') last--;
+  return lines.map((l, i) => (i === last ? '<span class="err-key">' + escH(l) + '</span>' : escH(l))).join('\n');
+}
+
 async function castAct1() {
   const res = await fetch('/cast', {
     method: 'POST',
@@ -66,8 +90,16 @@ async function castAct1() {
   const data = await res.json();
   const c = document.getElementById('act1-console');
   c.hidden = false;
-  c.textContent = (data.stdout || data.stderr || '(什么也没发生)');
-  c.classList.toggle('ok', data.ok);
+  if (data.ok) {
+    c.textContent = data.stdout || '(什么也没发生)';
+    c.classList.remove('err'); c.classList.add('ok');
+    const note = document.getElementById('act1-note');
+    note.hidden = false;
+    note.textContent = '↑ 这里就是「机器的回应」——以后每次施法，都先看这里。';
+  } else {
+    c.innerHTML = renderErr(data.stderr || '');
+    c.classList.remove('ok'); c.classList.add('err');
+  }
   if (data.ok) {
     const s = document.getElementById('act1-after');
     s.hidden = false;
@@ -86,8 +118,22 @@ async function castAct2(i) {
   const data = await res.json();
   const c = document.getElementById('act2-console');
   c.hidden = false;
-  c.textContent = (data.stdout || data.stderr || '');
-  c.classList.toggle('ok', data.ok);
+  if (data.ok) {
+    c.textContent = data.stdout || '';
+    c.classList.remove('err'); c.classList.add('ok');
+  } else {
+    c.innerHTML = renderErr(data.stderr || '');
+    c.classList.remove('ok'); c.classList.add('err');
+    const note = document.getElementById('act2-note');
+    note.hidden = false;
+    note.textContent = '↑ 从最后一行读起 —— 高亮那行就是机器亲口说的重点';
+    if (!window.__readErrSeen) {
+      window.__readErrSeen = true;
+      const re = document.getElementById('read-error');
+      re.hidden = false;
+      re.scrollIntoView({behavior:'smooth'});
+    }
+  }
   const s = document.getElementById('act2-after');
   s.hidden = false;
   s.textContent = '老精灵：\n' + expAfter[i];

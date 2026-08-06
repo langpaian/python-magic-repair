@@ -36,6 +36,16 @@ App.ready().then((C) => {
 
   let doneExp = new Set();
 
+  function escH(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function renderErr(text) {
+    const lines = String(text).split("\n");
+    let last = lines.length - 1;
+    while (last >= 0 && lines[last].trim() === "") last--;
+    return lines.map((l, i) => (i === last ? '<span class="err-key">' + escH(l) + "</span>" : escH(l))).join("\n");
+  }
+
   document.getElementById("app").innerHTML =
     '<h1 class="page-title">' + esc(C.initiation.title) + "</h1>"
     + '<section class="act" id="act1">'
@@ -44,6 +54,7 @@ App.ready().then((C) => {
     + '<textarea id="act1-code" spellcheck="false">' + esc(A[0].preset_code) + "</textarea>"
     + '<div class="actions"><button class="btn btn-primary" onclick="castAct1()">🪄 施法</button></div>'
     + '<pre id="act1-console" class="console" hidden></pre>'
+    + '<div id="act1-note" class="read-note" hidden></div>'
     + '<div id="act1-after" hidden></div>'
     + "</section>"
     + '<section class="act" id="act2" hidden>'
@@ -51,8 +62,15 @@ App.ready().then((C) => {
     + '<p class="spirit-talk">' + esc(A[1].spirit_intro) + "</p>"
     + '<div class="exp-row">' + A[1].experiments.map((e, i) => '<button class="btn btn-ghost" onclick="castAct2(' + i + ')">⚡ ' + esc(e.label) + "</button>").join("") + "</div>"
     + '<pre id="act2-console" class="console" hidden></pre>'
+    + '<div id="act2-note" class="read-note" hidden></div>'
     + '<div id="act2-after" hidden></div>'
     + '<div id="act2-both" hidden></div>'
+    + "</section>"
+    + '<section class="act" id="read-error" hidden>'
+    + "<h2>" + esc(C.initiation.read_error.title) + "</h2>"
+    + '<p class="spirit-talk">' + esc(C.initiation.read_error.intro) + "</p>"
+    + C.initiation.read_error.steps.map((s) => '<div class="code-note"><code class="note-name">' + esc(s.label) + '</code><p class="note-explain">' + esc(s.explain) + '</p></div>').join("")
+    + '<p class="spirit-talk">' + esc(C.initiation.read_error.closing) + "</p>"
     + "</section>"
     + '<section class="act" id="primer" hidden>'
     + "<h2>" + esc(C.initiation.primer.title) + "</h2>"
@@ -78,8 +96,16 @@ App.ready().then((C) => {
     c.hidden = false;
     c.textContent = "（正在唤醒机器……）";
     const r = await Runner.run(code);
-    c.textContent = r.stdout || r.stderr || "（什么也没发生）";
-    c.classList.toggle("ok", r.ok);
+    if (r.ok) {
+      c.textContent = r.stdout || "（什么也没发生）";
+      c.classList.remove("err"); c.classList.add("ok");
+      const note = document.getElementById("act1-note");
+      note.hidden = false;
+      note.textContent = "↑ 这里就是「机器的回应」——以后每次施法，都先看这里。";
+    } else {
+      c.innerHTML = renderErr(r.stderr || "");
+      c.classList.remove("ok"); c.classList.add("err");
+    }
     if (r.ok) {
       document.getElementById("act1-after").hidden = false;
       document.getElementById("act1-after").innerHTML = spirit(A[0].spirit_after);
@@ -93,8 +119,22 @@ App.ready().then((C) => {
     c.hidden = false;
     c.textContent = "（正在唤醒机器……）";
     const r = await Runner.run(A[1].experiments[i].code);
-    c.textContent = r.stdout || r.stderr || "";
-    c.classList.toggle("ok", r.ok);
+    if (r.ok) {
+      c.textContent = r.stdout || "";
+      c.classList.remove("err"); c.classList.add("ok");
+    } else {
+      c.innerHTML = renderErr(r.stderr || "");
+      c.classList.remove("ok"); c.classList.add("err");
+      const note = document.getElementById("act2-note");
+      note.hidden = false;
+      note.textContent = "↑ 从最后一行读起 —— 高亮那行就是机器亲口说的重点";
+      if (!window.__readErrSeen) {
+        window.__readErrSeen = true;
+        const re = document.getElementById("read-error");
+        re.hidden = false;
+        re.scrollIntoView({ behavior: "smooth" });
+      }
+    }
     document.getElementById("act2-after").hidden = false;
     document.getElementById("act2-after").innerHTML = spirit(A[1].experiments[i].spirit_after);
     doneExp.add(i);

@@ -42,6 +42,7 @@
     <div class="console-pane">
       <div class="pane-title">机器的回应</div>
       <pre id="console" class="console">……</pre>
+      <div id="read-note" class="read-note" hidden></div>
       <div id="spirit" class="spirit" hidden></div>
       <div id="answer" class="answer" hidden></div>
     </div>
@@ -116,14 +117,29 @@ async function submitFix() {
   }
 }
 
+function escH(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function renderErr(text) {
+  const lines = String(text).split('\n');
+  let last = lines.length - 1;
+  while (last >= 0 && lines[last].trim() === '') last--;
+  return lines.map((l, i) => (i === last ? '<span class="err-key">' + escH(l) + '</span>' : escH(l))).join('\n');
+}
+
 function showMachine(data, label) {
   const c = document.getElementById('console');
-  let out = '> ' + label + '\n';
-  if (data.stdout) out += data.stdout;
-  if (data.stderr) out += (data.stdout ? '\n' : '') + data.stderr;
-  c.textContent = out;
   c.classList.remove('ok', 'err');
-  c.classList.add(data.ok ? 'ok' : 'err');
+  const n = document.getElementById('read-note');
+  if (data.ok) {
+    c.textContent = '> ' + label + '\n' + (data.stdout || '');
+    c.classList.add('ok');
+    if (n) n.hidden = true;
+  } else {
+    c.innerHTML = '> ' + label + '\n' + renderErr(data.stderr || '');
+    c.classList.add('err');
+    if (n) { n.hidden = false; n.textContent = '↑ 从最后一行读起 —— 高亮那行就是机器亲口说的重点'; }
+  }
 }
 
 function showHint() {
