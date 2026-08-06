@@ -6,10 +6,21 @@
   <p class="subtitle">这里收集的不是错误，而是机器说过的一句句真话。</p>
   <p class="subtitle dim">已化解 {{ solved_count }} / {{ laws|length }} 条</p>
 
+  <div class="attr-legend">
+    <span class="lg-item" data-attr="spirit">精神 · 标量/基础</span>
+    <span class="lg-item" data-attr="fire">火 · 字符串</span>
+    <span class="lg-item" data-attr="ice">冰 · 列表</span>
+    <span class="lg-item" data-attr="space">空间 · 字典</span>
+    <span class="lg-item" data-attr="time">时间 · 元组</span>
+  </div>
+
   <div class="law-grid">
     {% for law in laws %}
-      <a class="law-card {% if law.name in solved_laws %}law-lit{% else %}law-grey{% endif %}" href="/ticket/{{ fid_by_law.get(law.name, '') }}">
+      {% set attr = attr_by_law.get(law.name, 'spirit') %}
+      <a class="law-card {% if law.name in solved_laws %}law-lit{% else %}law-grey{% endif %}" data-attr="{{ attr }}" href="/ticket/{{ fid_by_law.get(law.name, '') }}">
+        <span class="law-watermark">{{ sigils.get(attr, '')|safe }}</span>
         <div class="law-head">
+          <span class="law-sigil">{{ sigils.get(attr, '')|safe }}</span>
           <span class="law-name">{{ law.name }}</span>
           <span class="law-stage">{{ law.stage }}</span>
         </div>

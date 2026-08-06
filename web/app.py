@@ -28,6 +28,15 @@ INIT = load_initiation()
 ENDING = load_ending()
 GLOSSARY = load_glossary()
 
+# 五系属性符文（神秘学符号，随属性变色）
+SIGILS = {
+    "spirit": '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="3"/><path d="M10 1v6M10 13v6M1 10h6M13 10h6"/></svg>',
+    "fire": '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 2 L17 16 H3 Z"/><path d="M10 8v5"/></svg>',
+    "ice": '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 2v16M2 10h16M4.3 4.3l11.4 11.4M15.7 4.3L4.3 15.7"/></svg>',
+    "space": '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="6"/><circle cx="10" cy="10" r="2" fill="currentColor" stroke="none"/><path d="M10 -2v2M10 20v-2M-2 10h2M20 10h-2"/></svg>',
+    "time": '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4"/><circle cx="10" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M10 4v6l4 2"/></svg>',
+}
+
 
 @app.middleware("http")
 async def no_cache(request: Request, call_next):
@@ -223,10 +232,11 @@ def outcomes_download():
 def lore_page(request: Request):
     solved = solved_list()
     solved_laws = {f.law_name for f in FAULTS if f.id in solved}
-    # 每条法则对应到第一个还没点过的故障，让图鉴卡片能点进去做题
-    fid_by_law = {}
+    # 每条法则对应到第一个还没点过的故障 + 它所属的属性系（决定图鉴颜色/符文）
+    fid_by_law, attr_by_law = {}, {}
     for f in FAULTS:
         fid_by_law.setdefault(f.law_name, f.id)
+        attr_by_law.setdefault(f.law_name, f.attr_key)
     return templates.TemplateResponse(
         request,
         "lore.html",
@@ -235,5 +245,7 @@ def lore_page(request: Request):
             "solved_laws": solved_laws,
             "solved_count": len(solved_laws),
             "fid_by_law": fid_by_law,
+            "attr_by_law": attr_by_law,
+            "sigils": SIGILS,
         },
     )

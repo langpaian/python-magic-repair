@@ -365,12 +365,38 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
   background: var(--paper-card); border: 1px solid var(--line); border-radius: 14px;
   padding: 18px; transition: all .15s; box-shadow: 0 1px 4px rgba(164, 118, 63, .08);
 }
-.law-card:hover { transform: translateY(-2px); border-color: var(--gold-bright); box-shadow: 0 6px 24px rgba(201, 151, 46, .22); }
+.law-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(201, 151, 46, .22); }
 .law-lit { border-color: rgba(201, 151, 46, .55); }
-.law-grey { opacity: .65; }
-.law-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.law-grey { opacity: .7; }
+.law-head { display: flex; align-items: baseline; gap: 6px; margin-bottom: 10px; }
 .law-name { font-size: 19px; color: var(--gold); font-family: var(--serif); }
-.law-stage { font-size: 12px; color: var(--ink-faint); }
+.law-stage { font-size: 12px; color: var(--ink-faint); margin-left: auto; }
+
+/* 法则图鉴 · 五系属性神秘学配色 */
+.law-card[data-attr] { --attr: #a4763f; --attr-soft: rgba(164, 118, 63, .10); position: relative; overflow: hidden; }
+.law-card[data-attr="fire"]  { --attr: #e05a2b; --attr-soft: rgba(224, 90, 43, .10); }
+.law-card[data-attr="ice"]   { --attr: #4aa8c9; --attr-soft: rgba(74, 168, 201, .10); }
+.law-card[data-attr="space"] { --attr: #7a5fc0; --attr-soft: rgba(122, 95, 192, .10); }
+.law-card[data-attr="time"]  { --attr: #c9a961; --attr-soft: rgba(201, 169, 97, .10); }
+.law-card {
+  border-top: 3px solid var(--attr);
+  background: linear-gradient(180deg, var(--attr-soft), var(--paper-card) 45%);
+}
+.law-card .law-name { color: var(--attr); }
+.law-card.law-grey { border-top-color: var(--ink-faint); }
+.law-sigil { color: var(--attr); display: inline-flex; vertical-align: middle; }
+.law-watermark { position: absolute; right: 2px; bottom: 0; opacity: .09; color: var(--attr); pointer-events: none; }
+.law-watermark svg { width: 92px; height: 92px; }
+
+/* 属性图例 */
+.attr-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 16px 0 6px; font-size: 12.5px; color: var(--ink-soft); }
+.lg-item { display: inline-flex; align-items: center; gap: 5px; color: var(--attr, var(--gold)); }
+.lg-item::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--attr, var(--gold)); }
+.attr-legend .lg-item[data-attr="fire"]  { --attr: #e05a2b; }
+.attr-legend .lg-item[data-attr="ice"]   { --attr: #4aa8c9; }
+.attr-legend .lg-item[data-attr="space"] { --attr: #7a5fc0; }
+.attr-legend .lg-item[data-attr="time"]  { --attr: #c9a961; }
+.attr-legend .lg-item[data-attr="spirit"]{ --attr: #a4763f; }
 .law-statement { color: var(--ink-soft); line-height: 1.7; }
 .law-adult { font-size: 13px; color: var(--ink-faint); line-height: 1.6; }
 .mini-badge { width: 84px; margin-top: 10px; filter: drop-shadow(0 0 12px rgba(201, 151, 46, .35)); }

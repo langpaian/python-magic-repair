@@ -30,12 +30,27 @@ App.ready().then((C) => {
   const solvedLaws = C.faults.filter((f) => App.isSolved(f.id)).map((f) => f.law);
   const solvedCount = solvedLaws.length;
 
-  // 每条法则 → 对应一个故障，让图鉴卡片能点进去做题
+  // 每条法则 → 对应一个故障 + 它所属的属性系（决定图鉴颜色/符文）
   const lawToFault = {};
-  C.faults.forEach((f) => { if (!lawToFault[f.law]) lawToFault[f.law] = f.id; });
+  const attrByLaw = {};
+  C.faults.forEach((f) => {
+    if (!lawToFault[f.law]) lawToFault[f.law] = f.id;
+    if (!attrByLaw[f.law]) attrByLaw[f.law] = f.attr_key || "spirit";
+  });
+
+  // 五系属性符文（神秘学符号，随属性变色）
+  const SIGILS = {
+    spirit: '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="3"/><path d="M10 1v6M10 13v6M1 10h6M13 10h6"/></svg>',
+    fire: '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 2 L17 16 H3 Z"/><path d="M10 8v5"/></svg>',
+    ice: '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 2v16M2 10h16M4.3 4.3l11.4 11.4M15.7 4.3L4.3 15.7"/></svg>',
+    space: '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="6"/><circle cx="10" cy="10" r="2" fill="currentColor" stroke="none"/><path d="M10 -2v2M10 20v-2M-2 10h2M20 10h-2"/></svg>',
+    time: '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="4"/><circle cx="10" cy="10" r="1" fill="currentColor" stroke="none"/><path d="M10 4v6l4 2"/></svg>',
+  };
 
   const grid = laws.map((law) => {
     const lit = solvedLaws.includes(law.name);
+    const attr = attrByLaw[law.name] || "spirit";
+    const sig = SIGILS[attr] || "";
     let body;
     if (lit) {
       body = '<p class="law-statement">' + esc(law.statement) + "</p>"
@@ -44,8 +59,9 @@ App.ready().then((C) => {
     } else {
       body = '<p class="law-locked">？？？</p><p class="law-locked-sub">尚未化解 · 去听听机器怎么说</p>';
     }
-    return '<a class="law-card ' + (lit ? "law-lit" : "law-grey") + '" href="ticket.html?fault=' + (lawToFault[law.name] || "") + '">'
-      + '<div class="law-head"><span class="law-name">' + esc(law.name) + '</span><span class="law-stage">' + esc(law.stage) + '</span></div>'
+    return '<a class="law-card ' + (lit ? "law-lit" : "law-grey") + '" data-attr="' + attr + '" href="ticket.html?fault=' + (lawToFault[law.name] || "") + '">'
+      + '<span class="law-watermark">' + sig + '</span>'
+      + '<div class="law-head"><span class="law-sigil">' + sig + '</span><span class="law-name">' + esc(law.name) + '</span><span class="law-stage">' + esc(law.stage) + '</span></div>'
       + body
       + '<span class="law-action">' + (lit ? "再练一次 →" : "去化解这一单 →") + '</span>'
       + "</a>";
@@ -56,6 +72,13 @@ App.ready().then((C) => {
     + '<h1 class="page-title">法则图鉴</h1>'
     + '<p class="subtitle">这里收集的不是错误，而是机器说过的一句句真话。</p>'
     + '<p class="subtitle dim">已化解 ' + solvedCount + ' / ' + laws.length + " 条</p>"
+    + '<div class="attr-legend">'
+    + '<span class="lg-item" data-attr="spirit">精神 · 标量/基础</span>'
+    + '<span class="lg-item" data-attr="fire">火 · 字符串</span>'
+    + '<span class="lg-item" data-attr="ice">冰 · 列表</span>'
+    + '<span class="lg-item" data-attr="space">空间 · 字典</span>'
+    + '<span class="lg-item" data-attr="time">时间 · 元组</span>'
+    + "</div>"
     + '<div class="law-grid">' + grid + "</div>"
     + "</div>";
 
