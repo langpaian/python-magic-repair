@@ -122,6 +122,37 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
 .console.ok  { color: #8fd4a8; border-color: rgba(143, 212, 168, .3); }
 .console.err { color: #f0a28f; border-color: rgba(192, 68, 44, .4); }
 
+/* 施法动画 */
+.spell-anim {
+  position: relative; height: 128px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 8px;
+}
+.spell-field { position: relative; width: 96px; height: 96px; }
+.spell-ring, .spell-ring2 { position: absolute; inset: 0; border-radius: 50%;
+  border: 2px dashed rgba(201, 151, 46, .65); animation: ring-spin 1.1s linear infinite; }
+.spell-ring2 { inset: 12px; border-color: rgba(217, 164, 65, .5); animation-duration: .7s; animation-direction: reverse; }
+.spell-core { position: absolute; top: 50%; left: 50%; width: 12px; height: 12px; margin: -6px;
+  border-radius: 50%; background: radial-gradient(circle, #fff8e0, #d9a441);
+  box-shadow: 0 0 18px 5px rgba(217, 164, 65, .65); animation: core-pulse 1.1s ease-in-out infinite; }
+.spell-text { color: #a4763f; font-size: 13px; letter-spacing: 2px; animation: text-breathe 1.1s ease-in-out infinite; }
+@keyframes ring-spin { to { transform: rotate(360deg); } }
+@keyframes core-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.45); } }
+@keyframes text-breathe { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+
+/* 施法结果：成功金色弹出 / 失败红色震动 */
+.console.result-ok { animation: success-pop .7s ease; }
+@keyframes success-pop {
+  0% { transform: scale(.96); box-shadow: 0 0 0 rgba(46, 125, 91, 0); }
+  40% { transform: scale(1.01); box-shadow: 0 0 40px rgba(143, 212, 168, .55); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(46, 125, 91, 0); }
+}
+.console.result-err { animation: fail-shake .45s ease; box-shadow: 0 0 30px rgba(192, 68, 44, .35); }
+@keyframes fail-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
 .actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 
 /* 报错重点高亮：教新手"先看最后一行" */
@@ -180,9 +211,16 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
 .unlock-box {
   position: relative;
   background: linear-gradient(160deg, #fffaf0, #f3e7cd); border: 1px solid var(--gold-bright);
-  border-radius: 20px; max-width: 520px; width: 100%; padding: 30px; text-align: center;
-  box-shadow: 0 0 60px rgba(201, 151, 46, .35);
+  border-radius: 18px; max-width: 360px; width: 100%; padding: 22px 26px; text-align: center;
+  box-shadow: 0 0 50px rgba(201, 151, 46, .35);
+  animation: modal-pop .35s cubic-bezier(.2, 1.4, .4, 1);
 }
+@keyframes modal-pop { from { transform: scale(.78); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.unlock-badge img, .unlock-badge svg { width: 84px; height: auto; margin: 2px auto; }
+.unlock-box h3 { margin: 8px 0 6px; color: #8a6a34; font-family: var(--serif); font-size: 20px; }
+.unlock-box .law-statement { font-size: 13px; }
+.unlock-actions { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+.unlock-actions .btn { padding: 8px 14px; font-size: 14px; }
 .close-x {
   position: absolute; top: 8px; right: 14px; background: none; border: none;
   color: var(--ink-faint); font-size: 20px; cursor: pointer; line-height: 1;

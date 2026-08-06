@@ -26,12 +26,9 @@
 <div id="unlock" class="overlay" hidden>
   <div class="unlock-box">
     <button class="close-x" onclick="document.getElementById('unlock').hidden = true" aria-label="关闭">✕</button>
-    <h2>✨ 化解成功</h2>
-    <div id="unlock-badge"></div>
+    <div class="unlock-badge" id="unlock-badge"></div>
     <h3 id="unlock-law"></h3>
     <p id="unlock-statement" class="law-statement"></p>
-    <div id="unlock-story" class="story"></div>
-    <p id="unlock-note" class="adult-note"></p>
     <div class="unlock-actions" id="unlock-actions"></div>
   </div>
 </div>
@@ -78,6 +75,10 @@ App.ready().then((C) => {
     + "</div>"
     + '<div class="console-pane">'
     + '<div class="pane-title">机器的回应 <span id="engine-state" style="color:#a79fc8;font-size:12px"></span></div>'
+    + '<div id="spell-anim" class="spell-anim" hidden>'
+    + '<div class="spell-field"><div class="spell-ring"></div><div class="spell-ring spell-ring2"></div><div class="spell-core"></div></div>'
+    + '<div class="spell-text">正在施法…</div>'
+    + '</div>'
     + '<pre id="console" class="console">……</pre>'
     + '<div id="read-note" class="read-note" hidden></div>'
     + '<div id="spirit" class="spirit" hidden></div>'
@@ -92,6 +93,22 @@ App.ready().then((C) => {
   });
 
   const code = () => document.getElementById("code").value;
+
+  // —— 施法动画 ——
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  function spellStart() {
+    document.getElementById("spell-anim").hidden = false;
+    document.getElementById("console").hidden = true;
+  }
+  function spellResolve(ok) {
+    const a = document.getElementById("spell-anim");
+    const c = document.getElementById("console");
+    a.hidden = true;
+    c.hidden = false;
+    c.classList.remove("result-ok", "result-err");
+    void c.offsetWidth; // 重启动画
+    c.classList.add(ok ? "result-ok" : "result-err");
+  }
 
   function escH(s) {
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -118,27 +135,21 @@ App.ready().then((C) => {
   }
 
   window.cast = async () => {
-    const c = document.getElementById("console");
-    c.hidden = false;
-    c.textContent = "> 施法看看\n（正在唤醒机器……）";
-    c.className = "console";
-    const r = await Runner.run(code());
+    spellStart();
+    const [r] = await Promise.all([Runner.run(code()), sleep(1000)]);
+    spellResolve(r.ok);
     showMachine(r, "施法看看");
   };
 
   window.submitFix = async () => {
-    const c = document.getElementById("console");
-    c.hidden = false;
-    c.textContent = "> 提交修复\n（正在请机器验证……）";
-    c.className = "console";
-    const r = await Runner.judge(code(), fault.tests_code);
+    spellStart();
+    const [r] = await Promise.all([Runner.judge(code(), fault.tests_code), sleep(1000)]);
+    spellResolve(r.ok);
     if (r.ok) {
       App.markSolved(fault.id, code());
       document.getElementById("unlock-badge").innerHTML = App.badgeSVG(fault.law);
       document.getElementById("unlock-law").textContent = "法则 · " + fault.law;
       document.getElementById("unlock-statement").textContent = law.statement || "";
-      document.getElementById("unlock-story").innerHTML = App.storyHTML(fault.story);
-      document.getElementById("unlock-note").textContent = law.adult_note || "";
       const actions = [
         '<a class="btn btn-primary" href="javascript:void(0)" onclick="downloadOutcome()">📄 下载本次学习成果</a>',
         '<a class="btn btn-ghost" href="lore.html">法则图鉴</a>',

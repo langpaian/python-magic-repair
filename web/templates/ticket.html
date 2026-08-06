@@ -41,6 +41,14 @@
     </div>
     <div class="console-pane">
       <div class="pane-title">机器的回应</div>
+      <div id="spell-anim" class="spell-anim" hidden>
+        <div class="spell-field">
+          <div class="spell-ring"></div>
+          <div class="spell-ring spell-ring2"></div>
+          <div class="spell-core"></div>
+        </div>
+        <div class="spell-text">正在施法…</div>
+      </div>
       <pre id="console" class="console">……</pre>
       <div id="read-note" class="read-note" hidden></div>
       <div id="spirit" class="spirit" hidden></div>
@@ -52,12 +60,9 @@
 <div id="unlock" class="overlay" hidden>
   <div class="unlock-box">
     <button class="close-x" onclick="document.getElementById('unlock').hidden = true" aria-label="关闭">✕</button>
-    <h2>✨ 化解成功</h2>
-    <img id="badge-img" width="150" alt="法则徽章">
+    <div class="unlock-badge"><img id="badge-img" alt="法则徽章"></div>
     <h3 id="unlock-law"></h3>
     <p id="unlock-statement" class="law-statement"></p>
-    <div id="unlock-story" class="story"></div>
-    <p id="unlock-note" class="adult-note"></p>
     <div class="unlock-actions">
       <a class="btn btn-primary" href="/outcomes/{{ fault.id }}/download">📄 下载本次学习成果</a>
       <a class="btn btn-ghost" href="/lore">法则图鉴</a>
@@ -89,28 +94,51 @@ function revealAnswer() {
   a.textContent = '参考答案：\n' + FIXED;
 }
 
+// —— 施法动画 ——
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+function spellStart() {
+  document.getElementById('spell-anim').hidden = false;
+  document.getElementById('console').hidden = true;
+}
+function spellResolve(ok) {
+  const a = document.getElementById('spell-anim');
+  const c = document.getElementById('console');
+  a.hidden = true;
+  c.hidden = false;
+  c.classList.remove('result-ok', 'result-err');
+  void c.offsetWidth; // 重启动画
+  c.classList.add(ok ? 'result-ok' : 'result-err');
+}
+
 async function cast() {
-  const res = await fetch('/ticket/{{ fault.id }}/run', {
-    method: 'POST',
-    headers: {'Content-Type':'application/x-www-form-urlencoded'},
-    body: new URLSearchParams({code: code()}),
-  });
-  showMachine(await res.json(), '施法看看');
+  spellStart();
+  const [res] = await Promise.all([
+    fetch('/ticket/{{ fault.id }}/run', {
+      method: 'POST',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({code: code()}),
+    }).then((r) => r.json()),
+    sleep(1000),
+  ]);
+  spellResolve(res.ok);
+  showMachine(res, '施法看看');
 }
 
 async function submitFix() {
-  const res = await fetch('/ticket/{{ fault.id }}/submit', {
-    method: 'POST',
-    headers: {'Content-Type':'application/x-www-form-urlencoded'},
-    body: new URLSearchParams({code: code(), solved_at: localStamp()}),
-  });
-  const data = await res.json();
+  spellStart();
+  const [data] = await Promise.all([
+    fetch('/ticket/{{ fault.id }}/submit', {
+      method: 'POST',
+      headers: {'Content-Type':'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({code: code(), solved_at: localStamp()}),
+    }).then((r) => r.json()),
+    sleep(1000),
+  ]);
+  spellResolve(data.ok);
   if (data.ok) {
     document.getElementById('badge-img').src = data.badge_url;
     document.getElementById('unlock-law').textContent = '法则 · ' + data.law_name;
     document.getElementById('unlock-statement').textContent = data.law_statement;
-    document.getElementById('unlock-story').innerHTML = markdown(data.story);
-    document.getElementById('unlock-note').textContent = data.adult_note;
     document.getElementById('unlock').hidden = false;
   } else {
     showMachine(data, '提交修复');
@@ -146,11 +174,6 @@ function showHint() {
   const s = document.getElementById('spirit');
   s.hidden = false;
   s.textContent = '老精灵：' + {{ law.get("statement", "") | tojson }};
-}
-
-function markdown(text) {
-  return text.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
-             .split('\n\n').map(p => '<p>' + p + '</p>').join('');
 }
 </script>
 {% endblock %}
