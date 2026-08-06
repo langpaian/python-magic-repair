@@ -50,8 +50,8 @@ App.ready().then((C) => {
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   function spellStart() {
     const o = document.getElementById("spell-overlay");
-    o.className = "spell-overlay magic-m1 attr-spirit";
-    o.querySelector(".spell-label").textContent = "施放初级魔法…";
+    o.className = "spell-overlay fx-l3 attr-spirit"; // 启蒙保持酷炫：三环华丽特效
+    o.querySelector(".spell-label").textContent = "施放魔法…";
     o.hidden = false;
   }
   function spellResolve(ok) {
@@ -99,10 +99,10 @@ App.ready().then((C) => {
     + '<p class="spirit-talk">' + esc(A[2].spirit_intro) + "</p>"
     + '<a class="btn btn-primary" href="ticket.html?fault=' + A[2].next_ticket + '">🔧 接下第一单</a>'
     + "</section>"
-    + '<div id="spell-overlay" class="spell-overlay magic-m1 attr-spirit" hidden>'
+    + '<div id="spell-overlay" class="spell-overlay fx-l3 attr-spirit" hidden>'
     + '<div class="spell-float">'
-    + '<div class="spell-circle"><div class="spell-ring"></div><div class="spell-ring spell-ring2"></div><div class="spell-ring3"></div><div class="spell-orbit"><span class="p p1"></span><span class="p p2"></span><span class="p p3"></span></div><div class="spell-core"></div><div class="spell-burst"></div></div>'
-    + '<div class="spell-label">施放初级魔法…</div>'
+    + '<div class="spell-circle"><div class="spell-ring"></div><div class="spell-ring spell-ring2"></div><div class="spell-ring3"></div><div class="spell-ring4"></div><div class="spell-orbit"><span class="p p1"></span><span class="p p2"></span><span class="p p3"></span></div><div class="spell-core"></div><div class="spell-burst"></div></div>'
+    + '<div class="spell-label">施放魔法…</div>'
     + "</div>"
     + "</div>"
     + "</div>";

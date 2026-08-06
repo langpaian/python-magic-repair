@@ -88,7 +88,7 @@ App.ready().then((C) => {
     + "</div>"
     + '<div id="spell-overlay" class="spell-overlay" hidden>'
     + '<div class="spell-float">'
-    + '<div class="spell-circle"><div class="spell-ring"></div><div class="spell-ring spell-ring2"></div><div class="spell-ring3"></div><div class="spell-orbit"><span class="p p1"></span><span class="p p2"></span><span class="p p3"></span></div><div class="spell-core"></div><div class="spell-burst"></div></div>'
+    + '<div class="spell-circle"><div class="spell-ring"></div><div class="spell-ring spell-ring2"></div><div class="spell-ring3"></div><div class="spell-ring4"></div><div class="spell-orbit"><span class="p p1"></span><span class="p p2"></span><span class="p p3"></span></div><div class="spell-core"></div><div class="spell-burst"></div></div>'
     + '<div class="spell-label">施放魔法…</div>'
     + "</div>"
     + "</div>"
@@ -107,16 +107,15 @@ App.ready().then((C) => {
   const ATTR = fault.attr || "精神";
   const ATTR_KEYS = { "精神": "spirit", "火": "fire", "冰": "ice", "空间": "space", "时间": "time" };
   const ATTR_KEY = ATTR_KEYS[ATTR] || "spirit";
+  const DIFF = fault.difficulty || 2;
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-  function spellTier(magic) {
-    if (magic === "初级魔法") return "magic-m1";
-    if (magic === "中级魔法") return "magic-m2";
-    if (magic === "大师魔法") return "magic-m4";
-    return "magic-m3";
+  // 特效等级随难度：★1 小/单环，★4 大/多环/强光/范围大
+  function fxLevel(d) {
+    return "fx-l" + (d >= 4 ? 4 : d >= 3 ? 3 : d >= 2 ? 2 : 1);
   }
   function spellStart() {
     const o = document.getElementById("spell-overlay");
-    o.className = "spell-overlay " + spellTier(MAGIC) + " attr-" + ATTR_KEY;
+    o.className = "spell-overlay " + fxLevel(DIFF) + " attr-" + ATTR_KEY;
     o.querySelector(".spell-label").textContent = "施放" + MAGIC + " · " + ATTR + "系…";
     o.hidden = false;
   }

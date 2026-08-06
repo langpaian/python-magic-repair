@@ -140,12 +140,33 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
   border: 2px dotted rgba(201, 151, 46, .4); opacity: 0;
   animation: ring-spin 1.6s linear infinite reverse; }
 
-/* 魔法等级特效：初级单环小 / 中级双环 / 高级三环 / 大师三环强光 */
-.spell-overlay.magic-m1 .spell-ring2 { display: none; }
-.spell-overlay.magic-m1 .spell-circle { width: 52px; height: 52px; }
-.spell-overlay.magic-m3 .spell-ring3, .spell-overlay.magic-m4 .spell-ring3 { opacity: 1; }
-.spell-overlay.magic-m4 .spell-core { width: 14px; height: 14px; margin: -7px; box-shadow: 0 0 26px 9px rgba(217, 164, 65, .85); }
-.spell-overlay.magic-m4 .spell-label { color: #8a5a1a; }
+/* 特效等级 fx-l1~l4：简单=小/单环/低调，难=大/多环/强光/范围大 */
+.spell-ring4 { position: absolute; inset: -6px; border-radius: 50%;
+  border: 2px solid rgba(217, 164, 65, .4); opacity: 0;
+  animation: ring-expand 2.2s ease-out infinite; }
+@keyframes ring-expand { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(1.9); opacity: 0; } }
+
+.spell-overlay.fx-l1 .spell-circle { width: 46px; height: 46px; }
+.spell-overlay.fx-l1 .spell-ring2, .spell-overlay.fx-l1 .spell-ring3 { display: none; }
+.spell-overlay.fx-l1 .spell-core { width: 8px; height: 8px; margin: -4px; box-shadow: 0 0 12px 3px rgba(217, 164, 65, .6); }
+.spell-overlay.fx-l1 .spell-orbit { opacity: 0; }
+.spell-overlay.fx-l1 .spell-burst { width: 40px; height: 40px; margin: -20px; }
+
+.spell-overlay.fx-l2 .spell-circle { width: 64px; height: 64px; }
+.spell-overlay.fx-l2 .spell-ring3 { display: none; }
+.spell-overlay.fx-l2 .spell-burst { width: 60px; height: 60px; margin: -30px; }
+
+.spell-overlay.fx-l3 .spell-circle { width: 82px; height: 82px; }
+.spell-overlay.fx-l3 .spell-core { width: 12px; height: 12px; margin: -6px; box-shadow: 0 0 26px 9px rgba(217, 164, 65, .85); }
+.spell-overlay.fx-l3 .spell-orbit { opacity: 1; }
+.spell-overlay.fx-l3 .spell-burst { width: 74px; height: 74px; margin: -37px; }
+
+.spell-overlay.fx-l4 .spell-circle { width: 100px; height: 100px; }
+.spell-overlay.fx-l4 .spell-core { width: 15px; height: 15px; margin: -7.5px; box-shadow: 0 0 36px 13px rgba(217, 164, 65, .95); }
+.spell-overlay.fx-l4 .spell-ring4 { opacity: 1; }
+.spell-overlay.fx-l4 .spell-orbit { opacity: 1; }
+.spell-overlay.fx-l4 .spell-label { color: #8a5a1a; }
+.spell-overlay.fx-l4 .spell-burst { width: 88px; height: 88px; margin: -44px; }
 
 /* 属性系：不同魔法材料，不同施法颜色 */
 .spell-orbit { position: absolute; inset: -20px; animation: ring-spin 2.6s linear infinite; opacity: 0; pointer-events: none; }
@@ -156,9 +177,7 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
 .spell-overlay.attr-fire .spell-orbit, .spell-overlay.attr-ice .spell-orbit,
 .spell-overlay.attr-space .spell-orbit, .spell-overlay.attr-time .spell-orbit { opacity: 1; }
 
-/* 精神系：标量/基础/逻辑 —— 暖金单环（最朴素） */
-.spell-overlay.attr-spirit .spell-ring2 { display: none; }
-.spell-overlay.attr-spirit .spell-circle { width: 52px; height: 52px; }
+/* 精神系：标量/基础/逻辑 —— 只负责配色，结构由 fx-l 等级决定 */
 
 /* 火系：字符串 —— 橙红火苗 + 跳动 */
 .spell-overlay.attr-fire .spell-ring, .spell-overlay.attr-fire .spell-ring2 { border-color: rgba(176, 106, 80, .75); }
