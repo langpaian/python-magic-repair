@@ -18,21 +18,29 @@
     {% for law in laws %}
       {% set attr = attr_by_law.get(law.name, 'spirit') %}
       <a class="law-card {% if law.name in solved_laws %}law-lit{% else %}law-grey{% endif %}" data-attr="{{ attr }}" href="/ticket/{{ fid_by_law.get(law.name, '') }}">
-        <span class="law-watermark">{{ sigils.get(attr, '')|safe }}</span>
-        <div class="law-head">
-          <span class="law-sigil">{{ sigils.get(attr, '')|safe }}</span>
+        <div class="law-banner">
           <span class="law-name">{{ law.name }}</span>
           <span class="law-stage">{{ law.stage }}</span>
         </div>
-        {% if law.name in solved_laws %}
-          <p class="law-statement">{{ law.statement }}</p>
-          <p class="law-adult">{{ law.adult_note }}</p>
-          <img class="mini-badge" src="/badge/{{ law.name }}" alt="{{ law.name }}">
-        {% else %}
-          <p class="law-locked">？？？</p>
-          <p class="law-locked-sub">尚未化解 · 去听听机器怎么说</p>
-        {% endif %}
-        <span class="law-action">{% if law.name in solved_laws %}再练一次 →{% else %}去化解这一单 →{% endif %}</span>
+        <div class="law-art">
+          {% if law.name in solved_laws %}
+            <img class="law-badge" src="/badge/{{ law.name }}" alt="{{ law.name }}">
+          {% else %}
+            <div class="law-gem">{{ sigils.get(attr, '')|safe }}</div>
+          {% endif %}
+        </div>
+        <div class="law-body">
+          {% if law.name in solved_laws %}
+            <p class="law-statement">{{ law.statement }}</p>
+            <p class="law-adult">{{ law.adult_note }}</p>
+          {% else %}
+            <p class="law-locked">？？？</p>
+            <p class="law-locked-sub">尚未化解 · 去听听机器怎么说</p>
+          {% endif %}
+        </div>
+        <div class="law-foot">
+          <span class="law-action">{% if law.name in solved_laws %}再练一次 →{% else %}去化解这一单 →{% endif %}</span>
+        </div>
       </a>
     {% endfor %}
   </div>

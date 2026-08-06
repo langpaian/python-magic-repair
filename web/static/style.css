@@ -161,34 +161,34 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
 .spell-overlay.attr-spirit .spell-circle { width: 52px; height: 52px; }
 
 /* 火系：字符串 —— 橙红火苗 + 跳动 */
-.spell-overlay.attr-fire .spell-ring, .spell-overlay.attr-fire .spell-ring2 { border-color: rgba(224, 90, 43, .75); }
+.spell-overlay.attr-fire .spell-ring, .spell-overlay.attr-fire .spell-ring2 { border-color: rgba(176, 106, 80, .75); }
 .spell-overlay.attr-fire .spell-ring2 { border-color: rgba(255, 140, 66, .5); }
-.spell-overlay.attr-fire .spell-core { background: radial-gradient(circle, #ffd9a0, #e05a2b); box-shadow: 0 0 18px 5px rgba(224, 90, 43, .7); animation: core-flicker .5s ease-in-out infinite; }
-.spell-overlay.attr-fire .p { background: #ff8a3c; box-shadow: 0 0 8px 2px rgba(255, 138, 60, .75); }
-.spell-overlay.attr-fire .spell-label { color: #b34a1c; }
+.spell-overlay.attr-fire .spell-core { background: radial-gradient(circle, #ffd9a0, #b06a50); box-shadow: 0 0 18px 5px rgba(176, 106, 80, .7); animation: core-flicker .5s ease-in-out infinite; }
+.spell-overlay.attr-fire .p { background: #c08a72; box-shadow: 0 0 8px 2px rgba(255, 138, 60, .75); }
+.spell-overlay.attr-fire .spell-label { color: #8a4a34; }
 @keyframes core-flicker { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.5); } }
 
 /* 冰系：列表 —— 冰蓝冷光 */
-.spell-overlay.attr-ice .spell-ring, .spell-overlay.attr-ice .spell-ring2 { border-color: rgba(74, 168, 201, .75); }
+.spell-overlay.attr-ice .spell-ring, .spell-overlay.attr-ice .spell-ring2 { border-color: rgba(106, 147, 163, .75); }
 .spell-overlay.attr-ice .spell-ring2 { border-color: rgba(150, 220, 240, .55); }
-.spell-overlay.attr-ice .spell-core { background: radial-gradient(circle, #eafaff, #4aa8c9); box-shadow: 0 0 18px 5px rgba(74, 168, 201, .7); }
-.spell-overlay.attr-ice .p { background: #bfe9f5; box-shadow: 0 0 8px 2px rgba(160, 225, 245, .8); }
-.spell-overlay.attr-ice .spell-label { color: #1f6f8f; }
+.spell-overlay.attr-ice .spell-core { background: radial-gradient(circle, #eafaff, #6a93a3); box-shadow: 0 0 18px 5px rgba(106, 147, 163, .7); }
+.spell-overlay.attr-ice .p { background: #c8dce2; box-shadow: 0 0 8px 2px rgba(130, 168, 184, .8); }
+.spell-overlay.attr-ice .spell-label { color: #3f6b7a; }
 
 /* 空间系：字典 —— 深紫星云 + 强光 */
-.spell-overlay.attr-space .spell-ring, .spell-overlay.attr-space .spell-ring2 { border-color: rgba(122, 95, 192, .8); }
+.spell-overlay.attr-space .spell-ring, .spell-overlay.attr-space .spell-ring2 { border-color: rgba(138, 123, 168, .8); }
 .spell-overlay.attr-space .spell-ring2 { border-color: rgba(160, 130, 230, .55); }
-.spell-overlay.attr-space .spell-core { background: radial-gradient(circle, #efe9ff, #7a5fc0); box-shadow: 0 0 22px 7px rgba(122, 95, 192, .75); }
-.spell-overlay.attr-space .p { background: #cbb8ff; box-shadow: 0 0 9px 3px rgba(150, 120, 230, .85); }
-.spell-overlay.attr-space .spell-label { color: #5a3f9e; }
+.spell-overlay.attr-space .spell-core { background: radial-gradient(circle, #efe9ff, #8a7ba8); box-shadow: 0 0 22px 7px rgba(138, 123, 168, .75); }
+.spell-overlay.attr-space .p { background: #c9bfe0; box-shadow: 0 0 9px 3px rgba(156, 143, 184, .85); }
+.spell-overlay.attr-space .spell-label { color: #6a5a8f; }
 
 /* 时间系：元组/固定 —— 银金钟摆感 */
-.spell-overlay.attr-time .spell-ring, .spell-overlay.attr-time .spell-ring2 { border-color: rgba(201, 169, 97, .8); }
+.spell-overlay.attr-time .spell-ring, .spell-overlay.attr-time .spell-ring2 { border-color: rgba(160, 138, 79, .8); }
 .spell-overlay.attr-time .spell-ring2 { border-color: rgba(240, 210, 140, .6); }
-.spell-overlay.attr-time .spell-core { background: radial-gradient(circle, #fff8e8, #c9a961); box-shadow: 0 0 20px 6px rgba(201, 169, 97, .75); }
-.spell-overlay.attr-time .p { background: #f2e0b0; box-shadow: 0 0 9px 3px rgba(220, 185, 110, .85); }
-.spell-overlay.attr-time .spell-label { color: #8a6a2f; }
-.spell-overlay.attr-time .spell-ring3 { border-color: rgba(201, 169, 97, .35); }
+.spell-overlay.attr-time .spell-core { background: radial-gradient(circle, #fff8e8, #a08a4f); box-shadow: 0 0 20px 6px rgba(160, 138, 79, .75); }
+.spell-overlay.attr-time .p { background: #e4d4a8; box-shadow: 0 0 9px 3px rgba(178, 160, 106, .85); }
+.spell-overlay.attr-time .spell-label { color: #7a6834; }
+.spell-overlay.attr-time .spell-ring3 { border-color: rgba(160, 138, 79, .35); }
 .spell-core { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; margin: -5px;
   border-radius: 50%; background: radial-gradient(circle, #fff8e0, #d9a441);
   box-shadow: 0 0 16px 4px rgba(217, 164, 65, .7); animation: core-pulse 1s ease-in-out infinite; }
@@ -372,31 +372,70 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
 .law-name { font-size: 19px; color: var(--gold); font-family: var(--serif); }
 .law-stage { font-size: 12px; color: var(--ink-faint); margin-left: auto; }
 
-/* 法则图鉴 · 五系属性神秘学配色 */
-.law-card[data-attr] { --attr: #a4763f; --attr-soft: rgba(164, 118, 63, .10); position: relative; overflow: hidden; }
-.law-card[data-attr="fire"]  { --attr: #e05a2b; --attr-soft: rgba(224, 90, 43, .10); }
-.law-card[data-attr="ice"]   { --attr: #4aa8c9; --attr-soft: rgba(74, 168, 201, .10); }
-.law-card[data-attr="space"] { --attr: #7a5fc0; --attr-soft: rgba(122, 95, 192, .10); }
-.law-card[data-attr="time"]  { --attr: #c9a961; --attr-soft: rgba(201, 169, 97, .10); }
+/* 法则图鉴 · 炉石传说风卡牌（五系低饱和 + 中央符文徽记） */
+.law-card[data-attr] { --attr: #9a8465; --attr-light: #a8987c; --attr-soft: rgba(154, 132, 101, .10); }
+.law-card[data-attr="fire"]  { --attr: #b06a50; --attr-light: #c08a72; --attr-soft: rgba(176, 106, 80, .10); }
+.law-card[data-attr="ice"]   { --attr: #6a93a3; --attr-light: #82a8b8; --attr-soft: rgba(106, 147, 163, .10); }
+.law-card[data-attr="space"] { --attr: #8a7ba8; --attr-light: #9c8fb8; --attr-soft: rgba(138, 123, 168, .10); }
+.law-card[data-attr="time"]  { --attr: #a08a4f; --attr-light: #b2a06a; --attr-soft: rgba(160, 138, 79, .10); }
 .law-card {
-  border-top: 3px solid var(--attr);
-  background: linear-gradient(180deg, var(--attr-soft), var(--paper-card) 45%);
+  position: relative; overflow: hidden; padding: 0;
+  background: linear-gradient(180deg, #fdf8ec, #f1e7d0);
+  border: 2px solid var(--attr); border-radius: 16px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .45), 0 3px 12px rgba(0, 0, 0, .08);
 }
-.law-card .law-name { color: var(--attr); }
-.law-card.law-grey { border-top-color: var(--ink-faint); }
-.law-sigil { color: var(--attr); display: inline-flex; vertical-align: middle; }
-.law-watermark { position: absolute; right: 2px; bottom: 0; opacity: .09; color: var(--attr); pointer-events: none; }
-.law-watermark svg { width: 92px; height: 92px; }
+.law-card:hover { transform: translateY(-3px); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .45), 0 9px 28px rgba(0, 0, 0, .15); }
+.law-grey { opacity: .78; }
+.law-banner {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(180deg, var(--attr-light), var(--attr));
+  color: #fff;
+}
+.law-banner .law-name { font-family: var(--serif); font-size: 16px; color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .35); }
+.law-banner .law-stage { font-size: 11px; color: rgba(255, 255, 255, .9); }
+.law-art {
+  min-height: 96px; display: flex; align-items: center; justify-content: center;
+  background:
+    radial-gradient(circle at 50% 42%, var(--attr-soft), transparent 72%),
+    linear-gradient(180deg, rgba(255, 255, 255, .35), rgba(0, 0, 0, .03));
+  border-bottom: 1px solid rgba(0, 0, 0, .07);
+}
+.law-gem {
+  width: 52px; height: 52px; transform: rotate(45deg);
+  background: linear-gradient(160deg, var(--attr-light), var(--attr));
+  border: 2px solid rgba(255, 255, 255, .6);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .28), inset 0 1px 2px rgba(255, 255, 255, .5);
+  display: flex; align-items: center; justify-content: center;
+}
+.law-gem svg { transform: rotate(-45deg); width: 26px; height: 26px; color: #fff; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .35)); }
+.law-badge { width: 74px; filter: drop-shadow(0 3px 8px rgba(0, 0, 0, .22)); }
+.law-body { padding: 12px 14px; }
+.law-body .law-statement { margin: 0 0 8px; }
+.law-body .law-adult { margin: 0; }
+.law-foot { padding: 0 14px 12px; }
+.law-locked { font-size: 24px; color: var(--attr); letter-spacing: 6px; margin: 4px 0; }
+.law-locked-sub { font-size: 12px; color: var(--ink-faint); }
+.law-action {
+  display: inline-block; font-size: 13px; color: var(--attr);
+  border-bottom: 1px dotted var(--attr);
+}
+.law-card:hover .law-action { color: var(--ink); border-color: var(--ink); }
 
-/* 属性图例 */
-.attr-legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 16px 0 6px; font-size: 12.5px; color: var(--ink-soft); }
-.lg-item { display: inline-flex; align-items: center; gap: 5px; color: var(--attr, var(--gold)); }
-.lg-item::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--attr, var(--gold)); }
-.attr-legend .lg-item[data-attr="fire"]  { --attr: #e05a2b; }
-.attr-legend .lg-item[data-attr="ice"]   { --attr: #4aa8c9; }
-.attr-legend .lg-item[data-attr="space"] { --attr: #7a5fc0; }
-.attr-legend .lg-item[data-attr="time"]  { --attr: #c9a961; }
-.attr-legend .lg-item[data-attr="spirit"]{ --attr: #a4763f; }
+/* 属性图例（低饱和药丸） */
+.attr-legend { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 12px; }
+.lg-item {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px;
+  font-size: 12px; color: var(--attr, #9a8465);
+  background: var(--attr-soft, rgba(0, 0, 0, .04));
+  border: 1px solid var(--attr, transparent);
+}
+.lg-item::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--attr, #9a8465); }
+.attr-legend .lg-item[data-attr="fire"]  { --attr: #b06a50; --attr-soft: rgba(176, 106, 80, .10); }
+.attr-legend .lg-item[data-attr="ice"]   { --attr: #6a93a3; --attr-soft: rgba(106, 147, 163, .10); }
+.attr-legend .lg-item[data-attr="space"] { --attr: #8a7ba8; --attr-soft: rgba(138, 123, 168, .10); }
+.attr-legend .lg-item[data-attr="time"]  { --attr: #a08a4f; --attr-soft: rgba(160, 138, 79, .10); }
+.attr-legend .lg-item[data-attr="spirit"]{ --attr: #9a8465; --attr-soft: rgba(154, 132, 101, .10); }
 .law-statement { color: var(--ink-soft); line-height: 1.7; }
 .law-adult { font-size: 13px; color: var(--ink-faint); line-height: 1.6; }
 .mini-badge { width: 84px; margin-top: 10px; filter: drop-shadow(0 0 12px rgba(201, 151, 46, .35)); }

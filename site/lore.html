@@ -51,19 +51,17 @@ App.ready().then((C) => {
     const lit = solvedLaws.includes(law.name);
     const attr = attrByLaw[law.name] || "spirit";
     const sig = SIGILS[attr] || "";
-    let body;
-    if (lit) {
-      body = '<p class="law-statement">' + esc(law.statement) + "</p>"
-        + '<p class="law-adult">' + esc(law.adult_note) + "</p>"
-        + '<img class="mini-badge" src="javascript:void(0)" data-law="' + esc(law.name) + '" alt="' + esc(law.name) + '">';
-    } else {
-      body = '<p class="law-locked">？？？</p><p class="law-locked-sub">尚未化解 · 去听听机器怎么说</p>';
-    }
+    const art = lit
+      ? '<img class="law-badge" src="javascript:void(0)" data-law="' + esc(law.name) + '" alt="' + esc(law.name) + '">'
+      : '<div class="law-gem">' + sig + '</div>';
+    const body = lit
+      ? '<p class="law-statement">' + esc(law.statement) + '</p><p class="law-adult">' + esc(law.adult_note) + '</p>'
+      : '<p class="law-locked">？？？</p><p class="law-locked-sub">尚未化解 · 去听听机器怎么说</p>';
     return '<a class="law-card ' + (lit ? "law-lit" : "law-grey") + '" data-attr="' + attr + '" href="ticket.html?fault=' + (lawToFault[law.name] || "") + '">'
-      + '<span class="law-watermark">' + sig + '</span>'
-      + '<div class="law-head"><span class="law-sigil">' + sig + '</span><span class="law-name">' + esc(law.name) + '</span><span class="law-stage">' + esc(law.stage) + '</span></div>'
-      + body
-      + '<span class="law-action">' + (lit ? "再练一次 →" : "去化解这一单 →") + '</span>'
+      + '<div class="law-banner"><span class="law-name">' + esc(law.name) + '</span><span class="law-stage">' + esc(law.stage) + '</span></div>'
+      + '<div class="law-art">' + art + '</div>'
+      + '<div class="law-body">' + body + '</div>'
+      + '<div class="law-foot"><span class="law-action">' + (lit ? "再练一次 →" : "去化解这一单 →") + '</span></div>'
       + "</a>";
   }).join("");
 
@@ -83,7 +81,7 @@ App.ready().then((C) => {
     + "</div>";
 
   // 客户端生成徽章 SVG（替代后端路由）
-  document.querySelectorAll(".mini-badge").forEach((img) => {
+  document.querySelectorAll(".law-badge").forEach((img) => {
     img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(App.badgeSVG(img.dataset.law));
   });
 });
