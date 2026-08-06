@@ -75,14 +75,16 @@ App.ready().then((C) => {
     + "</div>"
     + '<div class="console-pane">'
     + '<div class="pane-title">机器的回应 <span id="engine-state" style="color:#a79fc8;font-size:12px"></span></div>'
-    + '<div id="spell-anim" class="spell-anim" hidden>'
-    + '<div class="spell-field"><div class="spell-ring"></div><div class="spell-ring spell-ring2"></div><div class="spell-core"></div></div>'
-    + '<div class="spell-text">正在施法…</div>'
-    + '</div>'
     + '<pre id="console" class="console">……</pre>'
     + '<div id="read-note" class="read-note" hidden></div>'
     + '<div id="spirit" class="spirit" hidden></div>'
     + '<div id="answer" class="answer" hidden></div>'
+    + "</div>"
+    + '<div id="spell-overlay" class="spell-overlay" hidden>'
+    + '<div class="spell-float">'
+    + '<div class="spell-circle"><div class="spell-ring"></div><div class="spell-ring spell-ring2"></div><div class="spell-core"></div><div class="spell-burst"></div></div>'
+    + '<div class="spell-label">正在施法…</div>'
+    + "</div>"
     + "</div>"
     + "</div>"
     + "</div>";
@@ -94,20 +96,26 @@ App.ready().then((C) => {
 
   const code = () => document.getElementById("code").value;
 
-  // —— 施法动画 ——
+  // —— 施法动画（悬浮图层上的小法阵，瞬态） ——
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   function spellStart() {
-    document.getElementById("spell-anim").hidden = false;
-    document.getElementById("console").hidden = true;
+    const o = document.getElementById("spell-overlay");
+    o.classList.remove("spell-success", "spell-fail");
+    o.querySelector(".spell-label").textContent = "正在施法…";
+    o.hidden = false;
   }
   function spellResolve(ok) {
-    const a = document.getElementById("spell-anim");
-    const c = document.getElementById("console");
-    a.hidden = true;
-    c.hidden = false;
-    c.classList.remove("result-ok", "result-err");
-    void c.offsetWidth; // 重启动画
-    c.classList.add(ok ? "result-ok" : "result-err");
+    const o = document.getElementById("spell-overlay");
+    o.classList.add(ok ? "spell-success" : "spell-fail");
+    o.querySelector(".spell-label").textContent = ok ? "成功" : "失败";
+    setTimeout(() => {
+      o.hidden = true;
+      o.classList.remove("spell-success", "spell-fail");
+      const c = document.getElementById("console");
+      c.classList.remove("result-ok", "result-err");
+      void c.offsetWidth; // 重启动画
+      c.classList.add(ok ? "result-ok" : "result-err");
+    }, 750);
   }
 
   function escH(s) {

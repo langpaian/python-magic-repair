@@ -122,22 +122,44 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
 .console.ok  { color: #8fd4a8; border-color: rgba(143, 212, 168, .3); }
 .console.err { color: #f0a28f; border-color: rgba(192, 68, 44, .4); }
 
-/* 施法动画 */
-.spell-anim {
-  position: relative; height: 128px; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 8px;
+/* 施法动画：悬浮在图层之上的小法阵（瞬态） */
+.workshop { position: relative; }
+.spell-overlay {
+  position: absolute; inset: 0; z-index: 20; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 249, 235, .86), rgba(246, 239, 223, .35) 60%, transparent);
 }
-.spell-field { position: relative; width: 96px; height: 96px; }
+.spell-overlay[hidden] { display: none; }
+.spell-float { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.spell-circle { position: relative; width: 64px; height: 64px; }
 .spell-ring, .spell-ring2 { position: absolute; inset: 0; border-radius: 50%;
-  border: 2px dashed rgba(201, 151, 46, .65); animation: ring-spin 1.1s linear infinite; }
-.spell-ring2 { inset: 12px; border-color: rgba(217, 164, 65, .5); animation-duration: .7s; animation-direction: reverse; }
-.spell-core { position: absolute; top: 50%; left: 50%; width: 12px; height: 12px; margin: -6px;
+  border: 2px dashed rgba(201, 151, 46, .75); animation: ring-spin 1s linear infinite; }
+.spell-ring2 { inset: 10px; border-color: rgba(217, 164, 65, .55); animation-duration: .6s; animation-direction: reverse; }
+.spell-core { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; margin: -5px;
   border-radius: 50%; background: radial-gradient(circle, #fff8e0, #d9a441);
-  box-shadow: 0 0 18px 5px rgba(217, 164, 65, .65); animation: core-pulse 1.1s ease-in-out infinite; }
-.spell-text { color: #a4763f; font-size: 13px; letter-spacing: 2px; animation: text-breathe 1.1s ease-in-out infinite; }
+  box-shadow: 0 0 16px 4px rgba(217, 164, 65, .7); animation: core-pulse 1s ease-in-out infinite; }
+.spell-label { color: #8a6a34; font-size: 12px; letter-spacing: 3px; animation: text-breathe 1s ease-in-out infinite; }
 @keyframes ring-spin { to { transform: rotate(360deg); } }
 @keyframes core-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.45); } }
 @keyframes text-breathe { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+
+/* 成功：翠绿金色爆发环 + 标签变"成功" */
+.spell-overlay.spell-success { background: radial-gradient(circle at 50% 50%, rgba(255, 246, 214, .92), rgba(143, 212, 168, .16) 60%, transparent); }
+.spell-overlay.spell-success .spell-label { color: #2e7d5b; font-size: 15px; letter-spacing: 4px; }
+.spell-overlay.spell-success .spell-ring { border-color: rgba(143, 212, 168, .85); }
+.spell-overlay.spell-success .spell-ring2 { border-color: rgba(201, 151, 46, .7); }
+/* 失败：火红 + 震动 + 标签变"失败" */
+.spell-overlay.spell-fail { background: radial-gradient(circle at 50% 50%, rgba(255, 236, 231, .9), rgba(192, 68, 44, .12) 60%, transparent); }
+.spell-overlay.spell-fail .spell-label { color: #c0442c; font-size: 15px; letter-spacing: 4px; }
+.spell-overlay.spell-fail .spell-circle { animation: fail-shake .45s ease; }
+.spell-overlay.spell-fail .spell-ring { border-color: rgba(192, 68, 44, .85); }
+.spell-overlay.spell-fail .spell-ring2 { border-color: rgba(194, 87, 27, .7); }
+/* 爆发环：成功翠绿 / 失败火红，向外扩散消失 */
+.spell-burst { position: absolute; top: 50%; left: 50%; width: 60px; height: 60px; margin: -30px;
+  border-radius: 50%; opacity: 0; pointer-events: none; }
+.spell-overlay.spell-success .spell-burst { border: 3px solid rgba(143, 212, 168, .95); animation: burst-out .75s ease forwards; }
+.spell-overlay.spell-fail .spell-burst { border: 3px solid rgba(192, 68, 44, .95); animation: burst-out .5s ease forwards; }
+@keyframes burst-out { from { transform: scale(.3); opacity: 1; } to { transform: scale(3.4); opacity: 0; } }
 
 /* 施法结果：成功金色弹出 / 失败红色震动 */
 .console.result-ok { animation: success-pop .7s ease; }
