@@ -1,0 +1,14 @@
+id: '021'
+title: 固定配方不能改
+customer: 炼金术士
+law: 时间定格的配方
+law_statement: 机器说'元组不支持修改'的时候，想想：有些东西定下来就是定下来了。
+difficulty: 2
+category: tuple
+expected_error: TypeError
+magic: 高级魔法
+attr: 时间
+learn:
+  topic: 元组 tuple
+  url: https://www.runoob.com/python3/python3-tuple.html
+  note: 元组 ( ) 是固定不变的配方，不能改其中一个材料。要变，就换个新配方。

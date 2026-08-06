@@ -33,6 +33,8 @@ def main() -> None:
                 "learn": f.learn,
                 "magic": f.magic,
                 "magic_order": f.magic_order,
+                "attr": f.attr,
+                "attr_key": f.attr_key,
                 "category": f.task.get("category", ""),
                 "buggy_code": f.buggy_code,
                 "fixed_code": f.fixed_code,

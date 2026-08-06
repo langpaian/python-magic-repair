@@ -11,3 +11,4 @@ learn:
   topic: 比较运算符
   url: https://www.runoob.com/python3/python3-operators.html
   note: '> 和 < 的开口朝向较大的数。3 > 5 是 False，5 > 3 才是 True。'
+attr: 精神

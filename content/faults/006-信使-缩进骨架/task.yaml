@@ -11,3 +11,4 @@ learn:
   url: https://www.runoob.com/python3/python3-basic-syntax.html
   note: Python 用缩进表示结构。def 和 if 下面的代码要整体往后退一格——机器把缩进当语法，不是排版。
 magic: 初级魔法
+attr: 精神

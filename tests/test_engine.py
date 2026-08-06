@@ -25,8 +25,8 @@ def test_cast_timeout():
 
 
 def test_content_loads():
-    assert len(load_faults()) == 20
-    assert len(load_laws()) == 20
+    assert len(load_faults()) == 21
+    assert len(load_laws()) == 21
     assert len(load_initiation()["acts"]) == 3
 
 
@@ -63,8 +63,8 @@ def test_build_static_output_is_complete():
     root = pathlib.Path(__file__).resolve().parent.parent
     subprocess.run([sys.executable, str(root / "scripts" / "build_static.py")], cwd=root, check=True)
     data = json.loads((root / "site" / "data" / "content.json").read_text(encoding="utf-8"))
-    assert len(data["faults"]) == 20
-    assert len(data["laws"]) == 20
+    assert len(data["faults"]) == 21
+    assert len(data["laws"]) == 21
     assert len(data["initiation"]["acts"]) == 3
     assert data["ending"]["title"]
     assert all(f.get("error_headline") for f in data["faults"])

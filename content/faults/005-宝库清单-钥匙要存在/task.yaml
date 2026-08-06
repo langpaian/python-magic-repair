@@ -11,3 +11,4 @@ learn:
   url: https://www.runoob.com/python3/python3-dictionary.html
   note: inventory[键] 键不存在就报错；用 inventory.get(键, 默认值) 查不到时给个后备答案。
 magic: 高级魔法
+attr: 空间

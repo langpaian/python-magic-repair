@@ -11,3 +11,4 @@ learn:
   topic: 变量与赋值
   url: https://www.runoob.com/python3/python3-variable-types.html
   note: 用到的名字必须先被赋值（贴好标签）。机器不猜拼写——写岔一个字母，它就当是另一个人。
+attr: 精神

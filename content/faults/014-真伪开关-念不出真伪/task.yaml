@@ -11,3 +11,4 @@ learn:
   topic: 布尔值 · print
   url: https://www.runoob.com/python3/python3-variable-types.html
   note: True/False 也是材料。拼进句子要 str()，或者用逗号分开打印。
+attr: 精神

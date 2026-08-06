@@ -146,6 +146,49 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
 .spell-overlay.magic-m3 .spell-ring3, .spell-overlay.magic-m4 .spell-ring3 { opacity: 1; }
 .spell-overlay.magic-m4 .spell-core { width: 14px; height: 14px; margin: -7px; box-shadow: 0 0 26px 9px rgba(217, 164, 65, .85); }
 .spell-overlay.magic-m4 .spell-label { color: #8a5a1a; }
+
+/* 属性系：不同魔法材料，不同施法颜色 */
+.spell-orbit { position: absolute; inset: -20px; animation: ring-spin 2.6s linear infinite; opacity: 0; pointer-events: none; }
+.spell-orbit .p { position: absolute; width: 5px; height: 5px; border-radius: 50%; }
+.spell-orbit .p1 { top: -4px; left: 50%; margin-left: -2.5px; }
+.spell-orbit .p2 { bottom: 8px; left: 6px; }
+.spell-orbit .p3 { bottom: 8px; right: 6px; }
+.spell-overlay.attr-fire .spell-orbit, .spell-overlay.attr-ice .spell-orbit,
+.spell-overlay.attr-space .spell-orbit, .spell-overlay.attr-time .spell-orbit { opacity: 1; }
+
+/* 精神系：标量/基础/逻辑 —— 暖金单环（最朴素） */
+.spell-overlay.attr-spirit .spell-ring2 { display: none; }
+.spell-overlay.attr-spirit .spell-circle { width: 52px; height: 52px; }
+
+/* 火系：字符串 —— 橙红火苗 + 跳动 */
+.spell-overlay.attr-fire .spell-ring, .spell-overlay.attr-fire .spell-ring2 { border-color: rgba(224, 90, 43, .75); }
+.spell-overlay.attr-fire .spell-ring2 { border-color: rgba(255, 140, 66, .5); }
+.spell-overlay.attr-fire .spell-core { background: radial-gradient(circle, #ffd9a0, #e05a2b); box-shadow: 0 0 18px 5px rgba(224, 90, 43, .7); animation: core-flicker .5s ease-in-out infinite; }
+.spell-overlay.attr-fire .p { background: #ff8a3c; box-shadow: 0 0 8px 2px rgba(255, 138, 60, .75); }
+.spell-overlay.attr-fire .spell-label { color: #b34a1c; }
+@keyframes core-flicker { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.5); } }
+
+/* 冰系：列表 —— 冰蓝冷光 */
+.spell-overlay.attr-ice .spell-ring, .spell-overlay.attr-ice .spell-ring2 { border-color: rgba(74, 168, 201, .75); }
+.spell-overlay.attr-ice .spell-ring2 { border-color: rgba(150, 220, 240, .55); }
+.spell-overlay.attr-ice .spell-core { background: radial-gradient(circle, #eafaff, #4aa8c9); box-shadow: 0 0 18px 5px rgba(74, 168, 201, .7); }
+.spell-overlay.attr-ice .p { background: #bfe9f5; box-shadow: 0 0 8px 2px rgba(160, 225, 245, .8); }
+.spell-overlay.attr-ice .spell-label { color: #1f6f8f; }
+
+/* 空间系：字典 —— 深紫星云 + 强光 */
+.spell-overlay.attr-space .spell-ring, .spell-overlay.attr-space .spell-ring2 { border-color: rgba(122, 95, 192, .8); }
+.spell-overlay.attr-space .spell-ring2 { border-color: rgba(160, 130, 230, .55); }
+.spell-overlay.attr-space .spell-core { background: radial-gradient(circle, #efe9ff, #7a5fc0); box-shadow: 0 0 22px 7px rgba(122, 95, 192, .75); }
+.spell-overlay.attr-space .p { background: #cbb8ff; box-shadow: 0 0 9px 3px rgba(150, 120, 230, .85); }
+.spell-overlay.attr-space .spell-label { color: #5a3f9e; }
+
+/* 时间系：元组/固定 —— 银金钟摆感 */
+.spell-overlay.attr-time .spell-ring, .spell-overlay.attr-time .spell-ring2 { border-color: rgba(201, 169, 97, .8); }
+.spell-overlay.attr-time .spell-ring2 { border-color: rgba(240, 210, 140, .6); }
+.spell-overlay.attr-time .spell-core { background: radial-gradient(circle, #fff8e8, #c9a961); box-shadow: 0 0 20px 6px rgba(201, 169, 97, .75); }
+.spell-overlay.attr-time .p { background: #f2e0b0; box-shadow: 0 0 9px 3px rgba(220, 185, 110, .85); }
+.spell-overlay.attr-time .spell-label { color: #8a6a2f; }
+.spell-overlay.attr-time .spell-ring3 { border-color: rgba(201, 169, 97, .35); }
 .spell-core { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; margin: -5px;
   border-radius: 50%; background: radial-gradient(circle, #fff8e0, #d9a441);
   box-shadow: 0 0 16px 4px rgba(217, 164, 65, .7); animation: core-pulse 1s ease-in-out infinite; }

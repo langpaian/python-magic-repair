@@ -11,3 +11,4 @@ learn:
   topic: 条件控制 if/else
   url: https://www.runoob.com/python3/python3-conditional.html
   note: if 的条件为真才走里面。rainy == False 在真的下雨时反而走 else。
+attr: 精神

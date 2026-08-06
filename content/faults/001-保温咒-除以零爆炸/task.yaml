@@ -11,3 +11,4 @@ learn:
   url: https://www.runoob.com/python3/python3-operators.html
   note: 除法 / 不能除以 0。补一个判断：room_temp 为 0 时给出'算不了'，而不是让机器爆炸。
 magic: 中级魔法
+attr: 精神

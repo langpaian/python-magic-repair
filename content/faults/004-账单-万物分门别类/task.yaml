@@ -11,3 +11,4 @@ learn:
   url: https://www.runoob.com/python3/python3-string.html
   note: 数字和文字是两种东西。要把数字写进句子里，先用 str() 转成文字，或直接用 f-string。
 magic: 初级魔法
+attr: 火

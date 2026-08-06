@@ -139,3 +139,10 @@ laws:
     stage: 熟练维修师
     statement: "循环要记得让变量前进，一步一个脚印。"
     adult_note: "while 里不推进变量会死循环；推进太快（一次 +2）会少跑。步长要正好一步。"
+
+  - id: tuple-frozen
+    name: 时间定格的配方
+    error: TypeError
+    stage: 熟练维修师
+    statement: "元组 ( ) 定下来就不改——时间把它定格了。"
+    adult_note: "元组不可变。想改其中一个元素？不行。要么换列表，要么新建一个元组。"

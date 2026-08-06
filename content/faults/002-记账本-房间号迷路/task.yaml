@@ -11,3 +11,4 @@ learn:
   url: https://www.runoob.com/python3/python3-list.html
   note: len(列表) 是元素个数，索引从 0 开始、到 len-1。range(len(列表)) 正好数到最后一位；多加一个 +1 就数到不存在的房间了。
 magic: 高级魔法
+attr: 冰
