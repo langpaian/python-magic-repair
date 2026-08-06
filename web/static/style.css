@@ -181,6 +181,24 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
 .err-key { display: inline-block; width: 100%; color: #ffb49a; background: rgba(192, 68, 44, .25); border-radius: 4px; }
 .read-note { margin-top: 10px; font-size: 12.5px; color: var(--gold); }
 
+/* 参考答案 · 答案卷轴 */
+.answer {
+  margin-top: 14px; border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--gold-bright);
+  box-shadow: 0 2px 16px rgba(164, 118, 63, .18);
+  animation: answer-in .3s ease;
+}
+@keyframes answer-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+.answer-label {
+  padding: 7px 14px; font-size: 12px; letter-spacing: 3px; color: #fff;
+  background: linear-gradient(135deg, #c9972e, #a4763f);
+}
+.answer-code {
+  margin: 0; padding: 14px; background: #fffdf6;
+  font-family: Menlo, Consolas, monospace; font-size: 13px;
+  white-space: pre-wrap; word-break: break-word; color: var(--ink); line-height: 1.6;
+}
+
 /* 精灵与文案 */
 .spirit {
   margin-top: 14px; padding: 14px 16px; border-radius: 12px;

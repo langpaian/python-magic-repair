@@ -44,7 +44,10 @@
       <pre id="console" class="console">……</pre>
       <div id="read-note" class="read-note" hidden></div>
       <div id="spirit" class="spirit" hidden></div>
-      <div id="answer" class="answer" hidden></div>
+      <div id="answer" class="answer" hidden>
+        <div class="answer-label">参考答案 · 标准做法</div>
+        <pre class="answer-code"></pre>
+      </div>
     </div>
 
     <div id="spell-overlay" class="spell-overlay" hidden>
@@ -95,7 +98,7 @@ function revealAnswer() {
   if (!confirm('参考答案会直接揭开谜底——确定现在就要看吗？\n\n（提示：就算看了答案，你之前读报错的过程也已经是你最大的收获了。）')) return;
   const a = document.getElementById('answer');
   a.hidden = false;
-  a.textContent = '参考答案：\n' + FIXED;
+  a.querySelector('.answer-code').textContent = FIXED;
 }
 
 // —— 施法动画（悬浮图层上的小法阵，瞬态） ——

@@ -78,7 +78,10 @@ App.ready().then((C) => {
     + '<pre id="console" class="console">……</pre>'
     + '<div id="read-note" class="read-note" hidden></div>'
     + '<div id="spirit" class="spirit" hidden></div>'
-    + '<div id="answer" class="answer" hidden></div>'
+    + '<div id="answer" class="answer" hidden>'
+    + '<div class="answer-label">参考答案 · 标准做法</div>'
+    + '<pre class="answer-code"></pre>'
+    + "</div>"
     + "</div>"
     + '<div id="spell-overlay" class="spell-overlay" hidden>'
     + '<div class="spell-float">'
@@ -186,7 +189,7 @@ App.ready().then((C) => {
     if (!confirm("参考答案会直接揭开谜底——确定现在就要看吗？\n\n（提示：就算看了答案，你之前读报错的过程也已经是你最大的收获了。）")) return;
     const a = document.getElementById("answer");
     a.hidden = false;
-    a.textContent = "参考答案：\n" + fault.fixed_code;
+    a.querySelector(".answer-code").textContent = fault.fixed_code;
   };
 });
 </script>
