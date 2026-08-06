@@ -47,8 +47,8 @@ def _fault(fid: str):
 
 
 def _sorted_faults() -> list:
-    """按难度（再按 id）排：新手先面对最容易的单。"""
-    return sorted(FAULTS, key=lambda f: (f.difficulty, f.id))
+    """按难度 → 魔法等级（材料<运算<逻辑<结构）→ id 排：基础在前。"""
+    return sorted(FAULTS, key=lambda f: (f.difficulty, f.magic_order, f.id))
 
 
 def _next_unsolved(exclude: str | None = None):

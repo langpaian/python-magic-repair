@@ -1,0 +1,13 @@
+id: '017'
+title: 平分魔石把整份和零头搞混
+customer: 占卜屋老板娘
+law: 整份和零头要分开
+law_statement: 分东西的答案不对时，看看 //（整份）和 %（零头）是不是用混了？
+difficulty: 2
+category: operators
+expected_error: ''
+magic: 中级魔法
+learn:
+  topic: 整除与取余
+  url: https://www.runoob.com/python3/python3-operators.html
+  note: 7 // 2 = 3（每人整份），7 % 2 = 1（剩下零头）。两个是不同的运算。

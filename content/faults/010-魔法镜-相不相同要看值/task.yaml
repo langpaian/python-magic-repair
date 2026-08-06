@@ -9,3 +9,4 @@ learn:
   topic: 比较运算符 == 与 is
   url: https://www.runoob.com/python3/python3-operators.html
   note: 比较内容用 ==；is 是问'是不是同一个东西'，对列表这种对象几乎总是 False。
+magic: 中级魔法

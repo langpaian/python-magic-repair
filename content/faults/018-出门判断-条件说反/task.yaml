@@ -1,0 +1,13 @@
+id: 018
+title: 出门带伞的条件说反了
+customer: 魔法信使
+law: 条件要对着想
+law_statement: 条件的结果和你的意图反了时，看看 if 后面的判断是不是写反了？
+difficulty: 2
+category: condition
+expected_error: ''
+magic: 高级魔法
+learn:
+  topic: 条件控制 if/else
+  url: https://www.runoob.com/python3/python3-conditional.html
+  note: if 的条件为真才走里面。rainy == False 在真的下雨时反而走 else。

@@ -10,3 +10,4 @@ learn:
   topic: 变量与赋值
   url: https://www.runoob.com/python3/python3-variable-types.html
   note: 用到的名字必须先被赋值（定义）。机器不猜拼写——名字写岔一个字母，它就当是另一个人。
+magic: 初级魔法

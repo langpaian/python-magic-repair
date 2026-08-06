@@ -1,0 +1,13 @@
+id: '014'
+title: 真伪开关念不出结果
+customer: 炼金术士
+law: 真伪也能被念出
+law_statement: 机器说'这两种东西不能相加'的时候，看看是不是想直接打印 True/False？
+difficulty: 1
+category: types
+expected_error: TypeError
+magic: 初级魔法
+learn:
+  topic: 布尔值 · print
+  url: https://www.runoob.com/python3/python3-variable-types.html
+  note: True/False 也是材料。拼进句子要 str()，或者用逗号分开打印。

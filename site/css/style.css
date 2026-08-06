@@ -136,6 +136,16 @@ textarea:focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--l
 .spell-ring, .spell-ring2 { position: absolute; inset: 0; border-radius: 50%;
   border: 2px dashed rgba(201, 151, 46, .75); animation: ring-spin 1s linear infinite; }
 .spell-ring2 { inset: 10px; border-color: rgba(217, 164, 65, .55); animation-duration: .6s; animation-direction: reverse; }
+.spell-ring3 { position: absolute; inset: -14px; border-radius: 50%;
+  border: 2px dotted rgba(201, 151, 46, .4); opacity: 0;
+  animation: ring-spin 1.6s linear infinite reverse; }
+
+/* 魔法等级特效：初级单环小 / 中级双环 / 高级三环 / 大师三环强光 */
+.spell-overlay.magic-m1 .spell-ring2 { display: none; }
+.spell-overlay.magic-m1 .spell-circle { width: 52px; height: 52px; }
+.spell-overlay.magic-m3 .spell-ring3, .spell-overlay.magic-m4 .spell-ring3 { opacity: 1; }
+.spell-overlay.magic-m4 .spell-core { width: 14px; height: 14px; margin: -7px; box-shadow: 0 0 26px 9px rgba(217, 164, 65, .85); }
+.spell-overlay.magic-m4 .spell-label { color: #8a5a1a; }
 .spell-core { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; margin: -5px;
   border-radius: 50%; background: radial-gradient(circle, #fff8e0, #d9a441);
   box-shadow: 0 0 16px 4px rgba(217, 164, 65, .7); animation: core-pulse 1s ease-in-out infinite; }

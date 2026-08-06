@@ -1,0 +1,13 @@
+id: '013'
+title: 魔法石的数量拼不进句子
+customer: 宝库管理员
+law: 数量要能写进话里
+law_statement: 机器说'这两种东西不能相加'的时候，看看是不是数字要写进文字里？
+difficulty: 1
+category: types
+expected_error: TypeError
+magic: 初级魔法
+learn:
+  topic: 字符串 · 类型转换
+  url: https://www.runoob.com/python3/python3-string.html
+  note: 数字和文字是两种东西。把数字写进句子里，先 str() 转成文字，或直接 f-string。

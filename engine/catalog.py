@@ -23,6 +23,8 @@ class Fault:
         self.difficulty = task.get("difficulty", 1)
         self.learn = task.get("learn", {})
         self.level = {1: "入门", 2: "基础", 3: "进阶", 4: "挑战"}.get(int(task.get("difficulty", 2)), "进阶")
+        self.magic = task.get("magic", "高级魔法")
+        self.magic_order = {"初级魔法": 0, "中级魔法": 1, "高级魔法": 2, "大师魔法": 3}.get(self.magic, 2)
         self.buggy_code = (dir / "buggy.py").read_text(encoding="utf-8")
         self.fixed_code = (dir / "fixed.py").read_text(encoding="utf-8") if (dir / "fixed.py").exists() else ""
         self.story_text = (dir / "story.md").read_text(encoding="utf-8") if (dir / "story.md").exists() else ""

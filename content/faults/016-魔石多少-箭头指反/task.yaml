@@ -1,0 +1,13 @@
+id: '016'
+title: 魔石谁多谁少说反了
+customer: 魔法学徒小奇
+law: 谁多谁少要看箭头
+law_statement: 答案不对劲的时候，看看 > 和 < 是不是指反了方向？
+difficulty: 2
+category: comparison
+expected_error: ''
+magic: 中级魔法
+learn:
+  topic: 比较运算符
+  url: https://www.runoob.com/python3/python3-operators.html
+  note: '> 和 < 的开口朝向较大的数。3 > 5 是 False，5 > 3 才是 True。'

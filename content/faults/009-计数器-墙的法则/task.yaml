@@ -10,3 +10,4 @@ learn:
   topic: 函数 · 作用域
   url: https://www.runoob.com/python3/python3-function.html
   note: 函数里给变量赋值，它就成了'墙内'局部变量。要改墙外的全局变量，需要 global 声明。
+magic: 大师魔法

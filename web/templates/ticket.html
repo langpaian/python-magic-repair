@@ -63,6 +63,7 @@
         <div class="spell-circle">
           <div class="spell-ring"></div>
           <div class="spell-ring spell-ring2"></div>
+          <div class="spell-ring3"></div>
           <div class="spell-core"></div>
           <div class="spell-burst"></div>
         </div>
@@ -109,12 +110,19 @@ function revealAnswer() {
   a.querySelector('.answer-code').textContent = FIXED;
 }
 
-// —— 施法动画（悬浮图层上的小法阵，瞬态） ——
+// —— 施法动画（悬浮图层上的小法阵，按魔法等级换特效） ——
+const MAGIC = {{ fault.magic | tojson }};
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+function spellTier(magic) {
+  if (magic === '初级魔法') return 'magic-m1';
+  if (magic === '中级魔法') return 'magic-m2';
+  if (magic === '大师魔法') return 'magic-m4';
+  return 'magic-m3';
+}
 function spellStart() {
   const o = document.getElementById('spell-overlay');
-  o.classList.remove('spell-success', 'spell-fail');
-  o.querySelector('.spell-label').textContent = '正在施法…';
+  o.className = 'spell-overlay ' + spellTier(MAGIC);
+  o.querySelector('.spell-label').textContent = '施放' + MAGIC + '…';
   o.hidden = false;
 }
 function spellResolve(ok) {

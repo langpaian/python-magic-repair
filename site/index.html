@@ -26,8 +26,12 @@
 <script>
 App.ready().then((C) => {
   const esc = App.esc;
-  // 按难度(再按id)排：新手先面对最容易的单
-  const sorted = C.faults.slice().sort((a, b) => (a.difficulty - b.difficulty) || (a.id < b.id ? -1 : 1));
+  // 按难度 → 魔法等级(材料<运算<逻辑<结构) → id 排：基础在前
+  const magicOrder = { "初级魔法": 0, "中级魔法": 1, "高级魔法": 2, "大师魔法": 3 };
+  const sorted = C.faults.slice().sort((a, b) =>
+    (a.difficulty - b.difficulty)
+    || ((magicOrder[a.magic] ?? 2) - (magicOrder[b.magic] ?? 2))
+    || (a.id < b.id ? -1 : 1));
   const solved = App.solvedList();
   const total = C.faults.length;
   const solvedCount = solved.length;

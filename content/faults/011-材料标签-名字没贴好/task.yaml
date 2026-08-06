@@ -1,0 +1,13 @@
+id: '011'
+title: 材料标签写岔了
+customer: 魔法学徒小奇
+law: 标签要先贴好
+law_statement: 机器说'这个名字我没听过'的时候，看看材料标签（变量名）是不是拼错了？
+difficulty: 1
+category: variables
+expected_error: NameError
+magic: 初级魔法
+learn:
+  topic: 变量与赋值
+  url: https://www.runoob.com/python3/python3-variable-types.html
+  note: 用到的名字必须先被赋值（贴好标签）。机器不猜拼写——写岔一个字母，它就当是另一个人。

@@ -9,3 +9,4 @@ learn:
   topic: 函数 · 默认参数
   url: https://www.runoob.com/python3/python3-function.html
   note: 默认值 [] 只在函数定义时创建一次，之后每次调用都共用它。标准解法：默认值用 None，函数里再新建。
+magic: 大师魔法

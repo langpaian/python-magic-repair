@@ -10,3 +10,4 @@ learn:
   topic: 列表方法
   url: https://www.runoob.com/python3/python3-list.html
   note: append() 会往列表末尾加东西，但它返回 None。别把它赋给新变量——方法做事，不回头。
+magic: 大师魔法

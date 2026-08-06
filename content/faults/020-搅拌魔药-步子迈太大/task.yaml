@@ -1,0 +1,13 @@
+id: '020'
+title: 搅拌魔药步子迈太大
+customer: 炼金术士
+law: 搅拌要一步步来
+law_statement: 循环跑的次数不对时，看看循环变量每次加的是不是 1？
+difficulty: 2
+category: loop
+expected_error: ''
+magic: 高级魔法
+learn:
+  topic: while 循环
+  url: https://www.runoob.com/python3/python3-loop.html
+  note: 循环要记得让变量前进。一次加 2，5 下的活只干 3 下就停了。

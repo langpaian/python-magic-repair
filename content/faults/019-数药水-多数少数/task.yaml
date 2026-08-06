@@ -1,0 +1,13 @@
+id: 019
+title: 数药水多数了少数了
+customer: 卖魔药的老妇人
+law: 数数别多数少数
+law_statement: 数出来的数和实际的数不一样时，看看 range(起点, 终点) 的终点是不是不含它？
+difficulty: 2
+category: loop
+expected_error: ''
+magic: 高级魔法
+learn:
+  topic: for 循环 · range
+  url: https://www.runoob.com/python3/python3-loop.html
+  note: range(1, 3) 是 1、2 两个数；要数到 3，得写 range(1, 4)——终点不包含。

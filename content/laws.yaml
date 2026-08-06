@@ -69,3 +69,73 @@ laws:
     stage: 见习维修师
     statement: "`==` 看值相不相同，`is` 看是不是同一个——机器从不把两者混淆，你却会。"
     adult_note: "对列表这类可变对象，is 几乎总是 False，因为它问的是'是不是同一个对象'。比较内容用 ==，is 只该用于 None 或单例。"
+
+  - id: tag-first
+    name: 标签要先贴好
+    error: NameError
+    stage: 新手法师
+    statement: "用到的名字，先写好标签（赋值），机器才认。"
+    adult_note: "NameError 是机器在说：'这个名字，你从没教过我。'变量拼写要前后一致——写岔一个字母，它当你是另一个人。"
+
+  - id: spell-complete
+    name: 咒语必须念完整
+    error: SyntaxError
+    stage: 新手法师
+    statement: "括号和引号要成双成对——念到一半的咒语不生效。"
+    adult_note: "SyntaxError 是机器在说：'这句话我没法读。'多半是少了右括号或引号，机器不会替你补。"
+
+  - id: count-in-sentence
+    name: 数量要能写进话里
+    error: TypeError
+    stage: 新手法师
+    statement: "数字要写进句子里，先 str() 转成文字。"
+    adult_note: "字符串和整数不能直接拼。str() 或 f-string，就是那道'把数字变成文字'的咒语。"
+
+  - id: truth-speakable
+    name: 真伪也能被念出
+    error: TypeError
+    stage: 新手法师
+    statement: "True/False 也是材料——拼进句子也要转成文字，或用逗号分开打印。"
+    adult_note: "布尔值是一种类型。print 里直接用逗号传多个参数，就不必硬拼成字符串。"
+
+  - id: recipe-math
+    name: 合成要按配方
+    error: ""
+    stage: 见习维修师
+    statement: "魔力值按配方算——加法还是乘法，机器照着来。"
+    adult_note: "先想清楚运算语义再写符号。1 + 2 写成了 1 * 2，机器不会提醒你配方错了。"
+
+  - id: arrow-compare
+    name: 谁多谁少要看箭头
+    error: ""
+    stage: 见习维修师
+    statement: "> 和 < 是指向多的一边的箭头，别指反。"
+    adult_note: "比较运算符的开口朝向较大的数。这是最容易被忽略的'看着对、实际反'的错。"
+
+  - id: whole-and-remainder
+    name: 整份和零头要分开
+    error: ""
+    stage: 见习维修师
+    statement: "// 是整份，% 是零头，分材料别混。"
+    adult_note: "7 // 2 = 3、7 % 2 = 1。两个运算符服务不同的问题，用混了答案就差得远。"
+
+  - id: condition-straight
+    name: 条件要对着想
+    error: ""
+    stage: 熟练维修师
+    statement: "if 的条件为真才走里面——把话说对。"
+    adult_note: "if rainy == False 在真的下雨时反而走 else。条件要对着你的意图写，别绕一个弯。"
+
+  - id: count-right
+    name: 数数别多数少数
+    error: ""
+    stage: 熟练维修师
+    statement: "range(起点, 终点) 不含终点——数药水别多数少数。"
+    adult_note: "range(1, 3) 是 1、2 两个数。要 1、2、3，终点得写 4。off-by-one 是真实世界里最多见的循环错误。"
+
+  - id: step-by-step
+    name: 搅拌要一步步来
+    error: ""
+    stage: 熟练维修师
+    statement: "循环要记得让变量前进，一步一个脚印。"
+    adult_note: "while 里不推进变量会死循环；推进太快（一次 +2）会少跑。步长要正好一步。"
